@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
-const URI = 'mongodb://localhost:27017/empleados';
-mongoose.connect(URI)
-.then(db => console.log('DB is connected'))
-.catch(err => console.error(err));
+require('dotenv').config(); // para leer .env
+const URI = process.env.MONGO_URI; // usa la variable del .env
+mongoose.connect(URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('✅ Conectado a MongoDB'))
+.catch(err => console.error('❌ Error al conectar MongoDB:', err));
+
 module.exports = mongoose;
