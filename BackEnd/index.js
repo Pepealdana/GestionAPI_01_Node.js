@@ -1,20 +1,26 @@
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
+// Archivo principal del servidor backend
+// Se configura y arranca el servidor Express
+// Se definen las funciones, la conexión a la base de datos y las rutas
+
+// módulos necesarios
+const express = require('express');              // Framework para crear el servidor web
+const morgan = require('morgan');                // Muestra las peticiones HTTP en consola
+const cors = require('cors');                    // Permite la comunicación entre el backend y el frontend
+require('dotenv').config();                      // Carga variables desde el archivo .env
+require('./database');                           // Activa la conexión con MongoDB
+
 const app = express(); // la constante app tendrá ahora todo el funcionamiento del servidor
-require('dotenv').config();          // ✅ primero carga .env
-require('./database');               // ✅ luego conecta a Mongo
 
-// Configuraciones
-app.set('port', process.env.PORT || 3000);
-app.use(morgan('dev')); 
-app.use(express.json()); // método que ayuda a convertir el código para que el servidor pueda entender lo que viene del cliente.
-app.use(cors({origin: 'http://localhost:4200'})); // método para comunicar con el cliente
+// Configuración del servidor
+app.set('port', process.env.PORT || 3000);       // Asigna el puerto, por defecto el 3000
+app.use(morgan('dev'));                          // Muestra logs de las peticiones
+app.use(express.json());                         // Permite interpretar las peticiones JSON del cliente
+app.use(cors({origin: 'http://localhost:4200'}));// Habilita el acceso desde el frontend (Angular, por ejemplo)
 
-// rutas de nuestro servidor
-app.use('/api/empleados',require('./routes/empleado.routes'));
+// Ruta base para todo lo relacionado con empleados
+app.use('/api/empleados', require('./routes/empleado.routes'));
 
-// Iniciando el servidor
-app.listen(app.get('port'), () => {// esta es una mejor manera de configurar el puerto
+// Se lanza el servidor y se muestra el puerto activo en consola
+app.listen(app.get('port'), () => {
     console.log('server activo en el puerto', app.get('port'));
-}); 
+});
