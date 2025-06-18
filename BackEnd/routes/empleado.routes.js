@@ -1,9 +1,6 @@
 /**
-
 *
-
 * creamos un módulo por eso utilizamos express
-
 */
 
 const express = require('express');

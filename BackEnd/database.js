@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
-require('dotenv').config(); // para leer .env
-const URI = process.env.MONGO_URI; // usa la variable del .env
-mongoose.connect(URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('✅ Conectado a MongoDB'))
-.catch(err => console.error('❌ Error al conectar MongoDB:', err));
+require('dotenv').config();
 
-module.exports = mongoose;
+const URI = process.env.MONGO_URI;
+
+if (!URI) {
+  console.error('❌ MONGO_URI no está definido.');
+  process.exit(1);
+}
+
+mongoose.connect(URI)
+  .then(() => console.log('✅ Conectado a MongoDB'))
+  .catch(err => console.error('❌ Error al conectar MongoDB:', err));
