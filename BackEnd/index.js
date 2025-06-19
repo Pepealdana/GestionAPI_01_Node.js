@@ -23,6 +23,9 @@ app.use('/api/empleados', require('./routes/empleado.routes'));
 // Ruta base para todo lo relacionado con servicios
 app.use('/api/servicios', require('./routes/servicio.routes'));
 
+// Ruta base para todo lo relacionado con clientes
+app.use('/api/usuarios', require('./routes/usuario.routes'));
+
 // Se lanza el servidor y se muestra el puerto activo en consola
 app.listen(app.get('port'), () => {
     console.log('server activo en el puerto', app.get('port'));
