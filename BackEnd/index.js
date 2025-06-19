@@ -20,6 +20,9 @@ app.use(cors({origin: 'http://localhost:4200'}));// Habilita el acceso desde el 
 // Ruta base para todo lo relacionado con empleados
 app.use('/api/empleados', require('./routes/empleado.routes'));
 
+// Ruta base para todo lo relacionado con servicios
+app.use('/api/servicios', require('./routes/servicio.routes'));
+
 // Se lanza el servidor y se muestra el puerto activo en consola
 app.listen(app.get('port'), () => {
     console.log('server activo en el puerto', app.get('port'));
