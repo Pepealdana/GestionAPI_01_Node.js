@@ -43,18 +43,30 @@ usuarioCtrl.eliminarUsuario = async (req, res) => {
 
 module.exports = usuarioCtrl;
 
-// Crear un nuevo usuario
+// Crear un nuevo usuario con validación
 usuarioCtrl.createUsuario = async (req, res) => {
+  const { nombre, email, telefono, rol } = req.body;
+
+  // Validación básica
+  if (!nombre || !email || !telefono || !rol) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+  }
+
+  // Validar formato del email
+  const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!regexCorreo.test(email)) {
+    return res.status(400).json({ error: 'El formato del correo es inválido.' });
+  }
+
   try {
-    const usuario = new Usuario(req.body);
+    const usuario = new Usuario({ nombre, email, telefono, rol });
     await usuario.save();
     res.json({ status: 'Usuario creado' });
   } catch (err) {
-    // Si el error es de duplicado de email
-    if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+    // Error si el correo ya está registrado
+    if (err.code === 11000 && err.keyPattern?.email) {
       res.status(400).json({ error: 'El correo ya está registrado.' });
     } else {
-      // Cualquier otro error
       res.status(500).json({ error: 'Error al crear el usuario', detalle: err.message });
     }
   }
