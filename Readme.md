@@ -1,6 +1,6 @@
 # Proyecto API REST - Gestión de Empleados, Servicios, Productos y Autenticación
 
-Este proyecto consiste en una API RESTful desarrollada con **Node.js**, **Express** y **MongoDB**, que permite gestionar empleados, servicios, productos y usuarios, así como realizar autenticación segura con JWT (JSON Web Tokens). Los usuarios pueden registrarse e iniciar sesión mediante rutas específicas (/api/auth/register y /api/auth/login). Al autenticarse, reciben un token JWT que deben enviar en el encabezado Authorization en cada solicitud a rutas protegidas. El backend valida este token para permitir el acceso solo a usuarios autorizados.
+Este proyecto consiste en una API RESTful desarrollada con **Node.js**, **Express** y **MongoDB**, que permite gestionar empleados, servicios, productos y usuarios, así como realizar autenticación segura con JWT (JSON Web Tokens). Los usuarios pueden registrarse e iniciar sesión mediante rutas específicas (/api/auth/register y /api/auth/login). Al autenticarse, reciben un **token JWT** que deben enviar en el encabezado Authorization en cada solicitud a rutas protegidas. El backend valida este token para permitir el acceso solo a usuarios autorizados.
 
 Una API RESTful es una interfaz que sigue los principios de REST (Representational State Transfer). Se caracteriza por:
 
