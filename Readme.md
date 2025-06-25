@@ -19,109 +19,146 @@ BackEnd/
 │   ├── producto.controller.js
 │   ├── usuario.controller.js
 │   └── auth.controller.js
-├── models/              # Esquemas de Mongoose
+├── middlewares/         # Esquemas de validación
+│   ├── isAdmin.js
+│   ├── verifyToken.js
+├── models/              # Esquemas de modelos
 │   ├── empleado.js
 │   ├── servicio.js
 │   ├── producto.js
 │   └── usuario.js
+├── postman/             # Herramienta de pruebas
+│   ├── gestion_empleados_collection.js
 ├── routes/              # Rutas de cada módulo
 │   ├── empleado.routes.js
 │   ├── servicio.routes.js
 │   ├── producto.routes.js
 │   ├── usuario.routes.js
 │   └── auth.routes.js
+└── .env                 # Variables de entorno (puerto y URI de MongoDB)
 ├── database.js          # Conexión a MongoDB
 ├── index.js             # Archivo principal del servidor
-└── .env                 # Variables de entorno (puerto y URI de MongoDB)
+
 ```
 
 ## 🚀 Tecnologías Utilizadas
 
-## 🚀 Tecnologías Utilizadas
+* Node.js
+* Express
+* MongoDB + Mongoose
+* Postman (para testing)
+* dotenv (configuración)
+* nodemon (modo desarrollo)
 
-- [Node.js](https://nodejs.org/) – Entorno de ejecución para JavaScript en el servidor.
-- [Express](https://expressjs.com/) – Framework web minimalista para Node.js.
-- [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) – Base de datos NoSQL + ODM para modelar datos.
-- [Postman](https://www.postman.com/) – Herramienta para probar y documentar APIs.
-- [dotenv](https://www.npmjs.com/package/dotenv) – Carga variables de entorno desde `.env`.
-- [nodemon](https://www.npmjs.com/package/nodemon) – Recarga automática del servidor en desarrollo.
+## 🔐 Autenticación con JWT
 
+## 🔐 Autenticación (`/api/auth`)
 
-## 🔐 Autenticación (Módulo `auth`)
-
-### 1. Registrar Usuario
-
-**Ruta:** `POST /api/auth/register`
-
-**JSON requerido:**
+### Registro (`POST /api/auth/register`)
+Crea un nuevo usuario con contraseña segura y devuelve un token JWT.
 
 ```json
 {
-  "nombre": "Pedro",
-  "email": "pedro@example.com",
+  "nombre": "admin01",
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+```
+
+### Login (`POST /api/auth/login`)
+Devuelve un token si el correo y contraseña coinciden.
+
+```json
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+```
+
+### 🪪 Usar el token JWT
+Copia el token recibido y úsalo en las rutas protegidas como esta:
+
+```
+Authorization: Bearer TU_TOKEN
+```
+
+En Postman:
+- Ve a la pestaña **Headers**
+- Agrega:  
+  - Key: `Authorization`  
+  - Value: `Bearer eyJhbGciOi...` (tu token)
+
+---
+
+## 👤 Usuarios (`/api/usuarios`)
+
+- `POST` – Crea un nuevo usuario (por ejemplo, desde un panel admin)
+- `GET` – Lista todos los usuarios (requiere token)
+- `GET /:id` – Trae los datos de un usuario específico
+- `PUT /:id` – Modifica datos de un usuario existente (admin)
+- `DELETE /:id` – Elimina a un usuario (admin)
+- `PATCH /cambiar-rol/:id` – Cambia el rol de usuario a `admin` o `usuario`
+- `GET /perfil` – Devuelve la información del usuario autenticado (requiere token)
+
+🛠️ **Ejemplo para crear usuario**:
+```json
+{
+  "nombre": "Camila",
+  "email": "camila@example.com",
+  "telefono": "3121234567",
+  "rol": "usuario",
   "password": "123456"
 }
 ```
 
-* Valida campos vacíos
-* Valida formato de email
-* Verifica si el correo ya está registrado
+---
 
-### 2. Iniciar Sesión
+## 👨‍💼 Empleados (`/api/empleados`)
 
-**Ruta:** `POST /api/auth/login`
+Permite CRUD completo (Crear, Leer, Actualizar, Eliminar) de empleados.
 
-**JSON requerido:**
-
+🛠️ **Ejemplo POST**:
 ```json
 {
-  "email": "pedro@example.com",
-  "password": "123456"
+  "name": "Luis Pérez",
+  "position": "Desarrollador",
+  "office": "Bogotá",
+  "salary": 4000000
 }
 ```
 
-* Valida existencia del usuario
-* Verifica que la contraseña sea correcta
+---
 
-## 👤 Usuarios (Módulo `usuarios`)
+## 🧰 Servicios (`/api/servicios`)
 
-**Campos:** `nombre`, `email`, `telefono`, `rol`
+Gestiona los servicios que ofrece la empresa.
 
-* `POST /api/usuarios` → Crear usuario (con validaciones)
-* `GET /api/usuarios` → Obtener todos los usuarios
-* `GET /api/usuarios/:id` → Obtener usuario por ID
-* `PUT /api/usuarios/:id` → Actualizar usuario (valida email repetido)
-* `DELETE /api/usuarios/:id` → Eliminar usuario
+🛠️ **Ejemplo POST**:
+```json
+{
+  "nombre": "Mantenimiento",
+  "descripcion": "Mantenimiento preventivo",
+  "precio": 150000
+}
+```
 
-## 👨‍💼 Empleados (Módulo `empleados`)
+---
 
-**Campos:** `name`, `position`, `office`, `salary`
+## 📦 Productos (`/api/productos`)
 
-* `POST /api/empleados` → Crear empleado
-* `GET /api/empleados` → Obtener todos
-* `GET /api/empleados/:id` → Obtener uno por ID
-* `PUT /api/empleados/:id` → Actualizar
-* `DELETE /api/empleados/:id` → Eliminar
+Administra los productos del inventario.
 
-## 🧰 Servicios (Módulo `servicios`)
+🛠️ **Ejemplo POST**:
+```json
+{
+  "nombre": "Impresora HP",
+  "categoria": "Tecnología",
+  "precio": 850000,
+  "stock": 12
+}
+```
 
-**Campos:** `nombre`, `descripcion`, `precio`
-
-* `POST /api/servicios`
-* `GET /api/servicios`
-* `GET /api/servicios/:id`
-* `PUT /api/servicios/:id`
-* `DELETE /api/servicios/:id`
-
-## 📦 Productos (Módulo `productos`)
-
-**Campos:** `nombre`, `categoria`, `precio`, `stock`
-
-* `POST /api/productos`
-* `GET /api/productos`
-* `GET /api/productos/:id`
-* `PUT /api/productos/:id`
-* `DELETE /api/productos/:id`
+---
 
 ## ▶️ Iniciar el Servidor
 
@@ -130,15 +167,38 @@ npm install
 npm run dev
 ```
 
+---
+
 ## 🧪 Testing con Postman
 
-1. Ejecutar el servidor (`npm run dev`)
-2. Enviar peticiones a las rutas descritas arriba
-3. Ver respuestas, validar errores, insertar o editar registros
+1. Ejecuta el servidor:  
+   ```bash
+   npm run dev
+   ```
+
+2. Abre **Postman**
+
+3. Ve a `Importar → Archivo` y selecciona:  
+   📦 `API_Gestion_Empleados_FULL.postman_collection.json`
+
+4. Usa los endpoints incluidos para:
+   - Registrar usuarios
+   - Hacer login
+   - Obtener el token
+   - Usar el token en rutas protegidas
+   - Probar POST, GET, PUT y DELETE para cada módulo
+
+---
+
+## 📁 Archivos útiles
+
+- `.env` → configuración de claves y URI de MongoDB
+- `API_Gestion_Empleados_FULL.postman_collection.json` → colección completa para Postman
+
+---
 
 ## 📌 Notas
 
-* No se ha implementado aún cifrado de contraseñas ni JWT (para próximos pasos)
 * MongoDB debe estar corriendo localmente (por ejemplo, en `mongodb://localhost:27017/empleados`)
 * Las colecciones se crean automáticamente cuando se insertan datos por primera vez
 
