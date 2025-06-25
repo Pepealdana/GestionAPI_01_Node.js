@@ -12,33 +12,36 @@ Una API RESTful es una interfaz que sigue los principios de REST (Representation
 ## 📁 Estructura del Proyecto
 
 ```
-BackEnd/
-├── controllers/         # Lógica para cada módulo
-│   ├── empleado.controller.js
-│   ├── servicio.controller.js
-│   ├── producto.controller.js
-│   ├── usuario.controller.js
-│   └── auth.controller.js
-├── middlewares/         # Esquemas de validación
-│   ├── isAdmin.js
-│   ├── verifyToken.js
-├── models/              # Esquemas de modelos
-│   ├── empleado.js
-│   ├── servicio.js
-│   ├── producto.js
-│   └── usuario.js
-├── postman/             # Herramienta de pruebas
-│   ├── gestion_empleados_collection.js
-├── routes/              # Rutas de cada módulo
-│   ├── empleado.routes.js
-│   ├── servicio.routes.js
-│   ├── producto.routes.js
-│   ├── usuario.routes.js
-│   └── auth.routes.js
-└── .env                 # Variables de entorno (puerto y URI de MongoDB)
-├── database.js          # Conexión a MongoDB
-├── index.js             # Archivo principal del servidor
-
+GESTION-EMPLEADOS
+├──BackEnd/
+│    ├── controllers/         # Lógica para cada módulo
+│    │   ├── empleado.controller.js
+│    │   ├── servicio.controller.js
+│    │   ├── producto.controller.js
+│    │   ├── usuario.controller.js
+│    │   └── auth.controller.js
+│    ├── middlewares/         # Esquemas de validación
+│    │   ├── isAdmin.js
+│    │   └── verifyToken.js
+│    ├── models/              # Esquemas de modelos
+│    │   ├── empleado.js
+│    │   ├── servicio.js
+│    │   ├── producto.js
+│    │   └── usuario.js
+│    ├── postman/             # Herramienta de pruebas
+│    │   └──  gestion_empleados_collection.json
+│    ├── routes/              # Rutas de cada módulo
+│    │   ├── empleado.routes.js
+│    │   ├── servicio.routes.js
+│    │   ├── producto.routes.js
+│    │   ├── usuario.routes.js
+│    │   └── auth.routes.js
+│    ├── database.js          # Conexión a MongoDB
+│    ├── empleado.js          
+│    └── index.js             # Archivo principal del  servidor
+├── .env                      # Variables de entorno (puerto y URI de MongoDB)
+├── packkage.json             # Define el proyecto, scripts y dependencias generales
+└── package-lock.json         # Versiones del proyecto
 ```
 
 ## 🚀 Tecnologías Utilizadas
