@@ -4,7 +4,7 @@ Este proyecto consiste en una API RESTful desarrollada con **Node.js**, **Expres
 
 Una API RESTful es una interfaz que sigue los principios de REST (Representational State Transfer). Se caracteriza por:
 
-📍 Utilizar HTTP: opera con métodos como GET, POST, PUT, DELETE para manipular recursos.
+📍 Utilizar HTTP: opera con métodos como **GET**, **POST**, **PUT**, **DELETE** para manipular recursos.
 🧩 Recursos identificados por URLs: por ejemplo, /api/empleados representa la colección de empleados.
 📦 Datos en formato JSON o XML: en este proyecto se usa JSON.
 🔁 Sin estado (stateless): cada petición al servidor debe contener toda la información necesaria para procesarla.
