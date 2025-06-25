@@ -1,56 +1,86 @@
 // Controlador para autenticación (registro e inicio de sesión)
 const Usuario = require('../models/usuario');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 const authCtrl = {};
 
-// Registrar nuevo usuario (ya lo tienes implementado)
+// REGISTRO
 authCtrl.register = async (req, res) => {
-  const { nombre, email, password } = req.body;
+  try {
+    const { nombre, email, password } = req.body;
 
-  if (!nombre || !email || !password) {
-    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    if (!nombre || !email || !password) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    }
+
+    // Verifica si ya existe un usuario con ese nombre o correo
+    const usuarioExistente = await Usuario.findOne({ $or: [{ email }, { nombre }] });
+    if (usuarioExistente) {
+      return res.status(400).json({ error: 'El nombre o correo ya están registrados.' });
+    }
+
+    // Cifrar contraseña
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Crear y guardar el usuario
+    const nuevoUsuario = new Usuario({ nombre, email, password: hashedPassword });
+    await nuevoUsuario.save();
+
+    // Crear token
+    const token = jwt.sign(
+      { id: nuevoUsuario._id, nombre: nuevoUsuario.nombre },
+      process.env.JWT_SECRET || 'secreto_temporal',
+      { expiresIn: '2h' }
+    );
+
+    res.status(201).json({
+      mensaje: 'Usuario registrado correctamente',
+      token
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error interno al registrar' });
   }
-
-  const usuarioExistente = await Usuario.findOne({ email });
-  if (usuarioExistente) {
-    return res.status(400).json({ error: 'El correo ya está registrado.' });
-  }
-
-  const nuevoUsuario = new Usuario({ nombre, email, password });
-  await nuevoUsuario.save();
-  res.json({ status: 'Usuario registrado correctamente' });
 };
 
-// Iniciar sesión (login)
+// LOGIN
 authCtrl.login = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  // Validar datos de entrada
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Correo y contraseña son obligatorios.' });
-  }
-
-  // Buscar usuario por email
-  const usuario = await Usuario.findOne({ email });
-
-  if (!usuario) {
-    return res.status(404).json({ error: 'El correo no está registrado.' });
-  }
-
-  // Comparar contraseñas (sin encriptar por ahora)
-  if (usuario.password !== password) {
-    return res.status(401).json({ error: 'Contraseña incorrecta.' });
-  }
-
-  // Si todo está bien
-  res.json({
-    status: 'Inicio de sesión exitoso',
-    usuario: {
-      id: usuario._id,
-      nombre: usuario.nombre,
-      email: usuario.email,
-      rol: usuario.rol
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Correo y contraseña son obligatorios.' });
     }
-  });
+
+    const usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      return res.status(404).json({ error: 'Correo no registrado.' });
+    }
+
+    const validPassword = await bcrypt.compare(password, usuario.password);
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Contraseña incorrecta.' });
+    }
+
+    const token = jwt.sign(
+      { id: usuario._id, nombre: usuario.nombre, rol: usuario.rol },
+      process.env.JWT_SECRET || 'secreto_temporal',
+      { expiresIn: '2h' }
+    );
+
+    res.json({
+      mensaje: 'Inicio de sesión exitoso',
+      token
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error interno al iniciar sesión' });
+  }
 };
 
 module.exports = authCtrl;

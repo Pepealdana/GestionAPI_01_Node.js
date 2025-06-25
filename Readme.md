@@ -37,12 +37,15 @@ BackEnd/
 
 ## 🚀 Tecnologías Utilizadas
 
-* Node.js
-* Express
-* MongoDB + Mongoose
-* Postman (para testing)
-* dotenv (configuración)
-* nodemon (modo desarrollo)
+## 🚀 Tecnologías Utilizadas
+
+- [Node.js](https://nodejs.org/) – Entorno de ejecución para JavaScript en el servidor.
+- [Express](https://expressjs.com/) – Framework web minimalista para Node.js.
+- [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) – Base de datos NoSQL + ODM para modelar datos.
+- [Postman](https://www.postman.com/) – Herramienta para probar y documentar APIs.
+- [dotenv](https://www.npmjs.com/package/dotenv) – Carga variables de entorno desde `.env`.
+- [nodemon](https://www.npmjs.com/package/nodemon) – Recarga automática del servidor en desarrollo.
+
 
 ## 🔐 Autenticación (Módulo `auth`)
 
