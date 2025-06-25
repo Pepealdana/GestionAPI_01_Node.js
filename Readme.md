@@ -208,4 +208,4 @@ npm run dev
 
 ---
 
-Cualquier error, revisa los logs en consola y asegúrate de que Mongo esté bien conectado ✅
+✅ Conectado a MongoDB
