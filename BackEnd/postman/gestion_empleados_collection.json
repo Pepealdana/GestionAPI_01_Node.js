@@ -1,0 +1,152 @@
+{
+  "info": {
+    "name": "API Gestion Empleados - Postman",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Registrar Usuario",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/auth/register"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"admin01\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/auth/login"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Perfil (Protegido)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{TOKEN}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/usuarios/perfil"
+        }
+      }
+    },
+    {
+      "name": "Crear Usuario",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/usuarios"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Camila\",\n  \"email\": \"camila@example.com\",\n  \"telefono\": \"3121234567\",\n  \"rol\": \"usuario\",\n  \"password\": \"123456\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Listar Usuarios (protegido)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{TOKEN}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/usuarios"
+        }
+      }
+    },
+    {
+      "name": "Crear Empleado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/empleados"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Luis P\\u00e9rez\",\n  \"position\": \"Analista\",\n  \"office\": \"Cali\",\n  \"salary\": 4200000\n}"
+        }
+      }
+    },
+    {
+      "name": "Crear Servicio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/servicios"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Soporte T\\u00e9cnico\",\n  \"descripcion\": \"Servicio de soporte remoto\",\n  \"precio\": 95000\n}"
+        }
+      }
+    },
+    {
+      "name": "Crear Producto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/productos"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Mouse Logitech\",\n  \"categoria\": \"Perif\\u00e9ricos\",\n  \"precio\": 55000,\n  \"stock\": 20\n}"
+        }
+      }
+    }
+  ]
+}
