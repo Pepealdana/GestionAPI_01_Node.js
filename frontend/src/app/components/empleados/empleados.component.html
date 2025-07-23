@@ -1,0 +1,14 @@
+<div class="container">
+  <h1>GESTIÓN DE EMPLEADOS</h1>
+  <div class="card">
+    <form (ngSubmit)="guardarEmpleado()">
+      <input type="text" placeholder="Ingrese su nombre" [(ngModel)]="empleado.nombre" name="nombre" required />
+      <input type="text" placeholder="Ingrese su cargo" [(ngModel)]="empleado.cargo" name="cargo" required />
+      <input type="text" placeholder="Ingrese su lugar de trabajo" [(ngModel)]="empleado.oficina" name="oficina" required />
+      <input type="number" placeholder="Salario" [(ngModel)]="empleado.salario" name="salario" required />
+
+      <button type="submit">GUARDAR</button>
+      <button type="button" (click)="limpiarFormulario()">LIMPIAR</button>
+    </form>
+  </div>
+</div>
