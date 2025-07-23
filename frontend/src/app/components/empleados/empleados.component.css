@@ -1,0 +1,11 @@
+/* Puedes agregar estilos aquí */
+input {
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+}
+
+button {
+  margin-right: 10px;
+  padding: 8px 16px;
+}
