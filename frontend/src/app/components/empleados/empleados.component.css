@@ -1,11 +1,45 @@
-/* Puedes agregar estilos aquí */
-input {
-  margin-bottom: 10px;
-  padding: 8px;
-  width: 100%;
+.empleado-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1rem;
+  justify-content: center;
 }
 
-button {
-  margin-right: 10px;
-  padding: 8px 16px;
+.empleado-card {
+  flex: 1 1 300px;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.empleado-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tabla-empleados {
+  flex: 2 1 600px;
+  overflow-x: auto;
+}
+
+.full-width-table {
+  width: 100%;
+  min-width: 400px;
 }

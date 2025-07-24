@@ -1,1 +1,80 @@
-<p>empleados works!</p>
+<div class="contenedor-empleados">
+
+  <!-- Formulario -->
+  <mat-card class="card-form">
+    <mat-card-title>GESTIÓN DE EMPLEADOS</mat-card-title>
+
+    <form (ngSubmit)="guardarEmpleado()" class="empleado-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre</mat-label>
+        <input matInput [(ngModel)]="empleado.nombre" name="nombre" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cargo</mat-label>
+        <input matInput [(ngModel)]="empleado.cargo" name="cargo" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Oficina</mat-label>
+        <input matInput [(ngModel)]="empleado.oficina" name="oficina" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Salario</mat-label>
+        <input matInput type="number" [(ngModel)]="empleado.salario" name="salario" required />
+      </mat-form-field>
+
+      <div class="button-row">
+        <button mat-raised-button color="primary" type="submit">
+          {{ empleado._id ? 'ACTUALIZAR' : 'GUARDAR' }}
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="limpiarFormulario()">LIMPIAR</button>
+      </div>
+    </form>
+  </mat-card>
+
+  <!-- Tabla -->
+  <mat-card class="card-tabla">
+    <mat-card-title>LISTA DE EMPLEADOS</mat-card-title>
+
+    <table mat-table [dataSource]="empleados" class="mat-elevation-z2 full-width-table">
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let e">{{ e.nombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cargo">
+        <th mat-header-cell *matHeaderCellDef>Cargo</th>
+        <td mat-cell *matCellDef="let e">{{ e.cargo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="oficina">
+        <th mat-header-cell *matHeaderCellDef>Oficina</th>
+        <td mat-cell *matCellDef="let e">{{ e.oficina }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="salario">
+        <th mat-header-cell *matHeaderCellDef>Salario</th>
+        <td mat-cell *matCellDef="let e">{{ e.salario | currency }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let e">
+          <button mat-icon-button color="accent" (click)="editarEmpleado(e)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="eliminarEmpleado(e._id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+
+    </table>
+  </mat-card>
+</div>

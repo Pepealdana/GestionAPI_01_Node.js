@@ -1,0 +1,31 @@
+<mat-card class="servicio-card">
+  <mat-card-title class="center-text">GESTIÓN DE SERVICIOS</mat-card-title>
+
+  <!-- Formulario para agregar un nuevo servicio -->
+  <form (ngSubmit)="guardarServicio()" class="servicio-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre del Servicio</mat-label>
+      <input matInput placeholder="Ej: Limpieza, Soporte" [(ngModel)]="servicio.nombre" name="nombre" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput placeholder="Describe el servicio" [(ngModel)]="servicio.descripcion" name="descripcion" required></textarea>
+    </mat-form-field>
+
+    <div class="button-row">
+      <button mat-raised-button color="primary" type="submit">GUARDAR</button>
+      <button mat-raised-button color="warn" type="button" (click)="limpiarFormulario()">LIMPIAR</button>
+    </div>
+  </form>
+</mat-card>
+
+<!-- Lista de servicios existentes -->
+<div class="servicios-lista">
+  <mat-card *ngFor="let s of servicios" class="servicio-item">
+    <mat-card-title>{{ s.nombre }}</mat-card-title>
+    <mat-card-content>
+      <p>{{ s.descripcion }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

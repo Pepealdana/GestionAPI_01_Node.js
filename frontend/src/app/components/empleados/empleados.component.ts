@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Empleado } from 'src/app/models/empleado';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 
@@ -7,7 +7,7 @@ import { EmpleadoService } from 'src/app/services/empleado.service';
   templateUrl: './empleados.component.html',
   styleUrls: ['./empleados.component.css']
 })
-export class EmpleadosComponent {
+export class EmpleadosComponent implements OnInit {
   empleado: Empleado = {
     nombre: '',
     cargo: '',
@@ -15,12 +15,50 @@ export class EmpleadosComponent {
     salario: 0
   };
 
+  empleados: Empleado[] = [];
+
+  columnasTabla: string[] = ['nombre', 'cargo', 'oficina', 'salario', 'acciones']; // 👈 aquí va
+
   constructor(private empleadoService: EmpleadoService) {}
 
-  guardarEmpleado() {
-    this.empleadoService.agregarEmpleado(this.empleado);
-    this.limpiarFormulario();
+  ngOnInit(): void {
+    this.obtenerEmpleados();
   }
+
+  guardarEmpleado() {
+    this.empleadoService.agregarEmpleado(this.empleado).subscribe({
+      next: () => {
+        this.obtenerEmpleados();
+        this.limpiarFormulario();
+      },
+      error: (err: any) => {
+        console.error('Error al guardar:', err);
+      }
+    });
+  }
+
+  obtenerEmpleados() {
+    this.empleadoService.getEmpleados().subscribe({
+      next: (data: Empleado[]) => {
+        this.empleados = data;
+      },
+      error: (err: any) => {
+        console.error('Error al obtener empleados:', err);
+      }
+    });
+  }
+
+  eliminarEmpleado(id: string) {
+    this.empleadoService.eliminarEmpleado(id).subscribe({
+      next: () => this.obtenerEmpleados(),
+      error: (err: any) => console.error('Error al eliminar:', err)
+    });
+  }
+
+editarEmpleado(empleado: Empleado) {
+  this.empleado = { ...empleado }; // Clonamos el objeto para editar
+}
+
 
   limpiarFormulario() {
     this.empleado = {
