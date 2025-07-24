@@ -1,0 +1,25 @@
+.servicio-card {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.servicio-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

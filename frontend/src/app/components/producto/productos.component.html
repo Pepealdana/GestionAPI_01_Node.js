@@ -1,0 +1,52 @@
+<mat-card class="productos-card">
+  <mat-card-title class="center-text">GESTIÓN DE PRODUCTOS</mat-card-title>
+
+  <form (ngSubmit)="guardarProducto()" class="productos-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput placeholder="Nombre del producto" [(ngModel)]="producto.nombre" name="nombre" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput placeholder="Descripción del producto" [(ngModel)]="producto.descripcion" name="descripcion" required></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" placeholder="Precio" [(ngModel)]="producto.precio" name="precio" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoría</mat-label>
+      <input matInput placeholder="Categoría" [(ngModel)]="producto.categoria" name="categoria" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Stock</mat-label>
+      <input matInput type="number" placeholder="Cantidad disponible" [(ngModel)]="producto.stock" name="stock" required />
+    </mat-form-field>
+
+    <div class="button-row">
+      <button mat-raised-button color="primary" type="submit">GUARDAR</button>
+      <button mat-raised-button color="warn" type="button" (click)="limpiarFormulario()">LIMPIAR</button>
+    </div>
+  </form>
+</mat-card>
+
+<hr />
+
+<!-- Lista de productos -->
+<mat-card *ngFor="let p of productos" class="productos-card">
+  <mat-card-title class="center-text">{{ p.nombre }}</mat-card-title>
+  <mat-card-content>
+    <p><strong>Descripción:</strong> {{ p.descripcion }}</p>
+    <p><strong>Precio:</strong> ${{ p.precio }}</p>
+    <p><strong>Categoría:</strong> {{ p.categoria }}</p>
+    <p><strong>Stock:</strong> {{ p.stock }}</p>
+  </mat-card-content>
+  <mat-card-actions class="button-row">
+    <button mat-raised-button color="warn" (click)="eliminarProducto(p._id!)">ELIMINAR</button>
+  </mat-card-actions>
+</mat-card>

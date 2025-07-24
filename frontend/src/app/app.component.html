@@ -1,11 +1,24 @@
-<nav class="nav-wrapper blue">
-  <div class="container">
-    <a href="/" class="brand-logo">GESTIÓN DE EMPLEADOS</a>
-  </div>
-</nav>
+<mat-toolbar color="primary" class="top-toolbar">
+  <span class="toolbar-title">APP - GESTIÓN DE EMPLEADOS</span>
+</mat-toolbar>
 
-<div class="container p-4">
-  <app-empleados></app-empleados>
+<!-- Botones con íconos -->
+<div class="nav-buttons">
+  <button mat-button routerLink="/empleados" routerLinkActive="active-button">
+    <mat-icon>group</mat-icon>
+    <span>Empleados</span>
+  </button>
+  <button mat-button routerLink="/servicios" routerLinkActive="active-button">
+    <mat-icon>build</mat-icon>
+    <span>Servicios</span>
+  </button>
+  <button mat-button routerLink="/productos" routerLinkActive="active-button">
+    <mat-icon>widgets</mat-icon>
+    <span>Productos</span>
+  </button>
 </div>
-<h1>Bienvenido</h1>
-<app-empleados></app-empleados>
+
+<!-- Área donde se cargan los componentes -->
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>

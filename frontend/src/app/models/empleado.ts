@@ -1,7 +1,7 @@
 // src/app/models/empleado.ts
 
 export interface Empleado {
-  id?: number;
+  _id?: string; // 👈 importante: opcional
   nombre: string;
   cargo: string;
   oficina: string;

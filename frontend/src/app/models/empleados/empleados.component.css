@@ -1,0 +1,30 @@
+.contenedor-empleados {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card-form,
+.card-tabla {
+  width: 100%;
+  max-width: 500px;
+  flex: 1 1 400px;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-width-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
