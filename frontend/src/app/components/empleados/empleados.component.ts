@@ -17,7 +17,7 @@ export class EmpleadosComponent implements OnInit {
 
   empleados: Empleado[] = [];
 
-  columnasTabla: string[] = ['nombre', 'cargo', 'oficina', 'salario', 'acciones']; // 👈 aquí va
+  columnasTabla: string[] = ['name', 'position', 'office', 'salary', 'acciones']; // 👈 aquí va
 
   constructor(private empleadoService: EmpleadoService) {}
 

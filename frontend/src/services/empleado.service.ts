@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Empleado } from '../models/empleado';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,27 +11,23 @@ export class EmpleadoService {
 
   constructor(private http: HttpClient) {}
 
-  private obtenerHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    });
+  // Obtener todos los empleados
+  getEmpleados(): Observable<Empleado[]> {
+    return this.http.get<Empleado[]>(this.apiUrl);
   }
 
-  getEmpleados(): Observable<any> {
-    return this.http.get(this.apiUrl, { headers: this.obtenerHeaders() });
+  // Crear nuevo empleado
+  crearEmpleado(data: Empleado): Observable<any> {
+    return this.http.post(this.apiUrl, data);
   }
 
-  crearEmpleado(data: any): Observable<any> {
-    return this.http.post(this.apiUrl, data, { headers: this.obtenerHeaders() });
+  // Actualizar un empleado por ID
+  actualizarEmpleado(id: string, data: Empleado): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, data);
   }
 
-  actualizarEmpleado(id: string, data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, data, { headers: this.obtenerHeaders() });
-  }
-
+  // Eliminar empleado por ID
   eliminarEmpleado(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.obtenerHeaders() });
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

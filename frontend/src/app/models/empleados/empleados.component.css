@@ -28,3 +28,35 @@
   gap: 12px;
   margin-top: 16px;
 }
+
+.formulario {
+  margin: 1rem auto;
+  max-width: 800px;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.campo {
+  flex: 1 1 48%;
+}
+
+.botones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.tabla {
+  margin: 2rem auto;
+  max-width: 1000px;
+  overflow-x: auto;
+}
+
+.tabla-responsive {
+  width: 100%;
+  min-width: 600px;
+}

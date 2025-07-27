@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const usuarioCtrl = require('../controllers/usuario.controller');
-const verifyToken = require('../middlewares/verifyToken');
+// const verifyToken = require('../middlewares/verifyToken');
 const isAdmin = require('../middlewares/isAdmin');
 
 // Ruta protegida para obtener el perfil del usuario autenticado
