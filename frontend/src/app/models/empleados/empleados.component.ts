@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Empleado } from 'src/app/models/empleado';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { Empleado } from '../../models/empleado.model';
 
 @Component({
   selector: 'app-empleados',
@@ -15,33 +14,35 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class EmpleadosComponent implements OnInit, AfterViewInit {
   empleado: Empleado = this.getEmpleadoVacio();
 
-  empleados: MatTableDataSource<Empleado> = new MatTableDataSource<Empleado>();
+  empleados: Empleado[] = []; // Lista original
+  dataSource = new MatTableDataSource<Empleado>(); // DataSource para la tabla
   columnasTabla: string[] = ['name', 'position', 'office', 'salary', 'acciones'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-  private empleadoService: EmpleadoService,
-  private snackBar: MatSnackBar
-) {}
-
-
+    private empleadoService: EmpleadoService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.obtenerEmpleados();
   }
 
   ngAfterViewInit(): void {
-    this.empleados.paginator = this.paginator;
-    this.empleados.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   obtenerEmpleados(): void {
     this.empleadoService.getEmpleados().subscribe({
       next: (data: Empleado[]) => {
-        this.empleados.data = data;
-        if (this.empleados.paginator) this.empleados.paginator.firstPage();
+        this.empleados = data;
+        this.dataSource.data = data;
+
+        // Asegura que el paginator y sort se asignen después de recibir datos
+        if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
       },
       error: (err) => console.error('Error al obtener empleados:', err)
     });
@@ -55,22 +56,32 @@ export class EmpleadosComponent implements OnInit, AfterViewInit {
 
     const operacion = this.empleado._id
       ? this.empleadoService.actualizarEmpleado(this.empleado._id, this.empleado)
-      : this.empleadoService.crearEmpleado(this.empleado);
+      : this.empleadoService.agregarEmpleado(this.empleado);
 
     operacion.subscribe({
       next: () => {
         this.obtenerEmpleados();
         this.limpiarFormulario();
+        this.mostrarMensaje(this.empleado._id ? 'Empleado actualizado' : 'Empleado creado');
       },
-      error: (err) => console.error('Error al guardar/actualizar:', err)
+      error: (err) => {
+        console.error('Error al guardar/actualizar:', err);
+        this.mostrarMensaje('Ocurrió un error al guardar');
+      }
     });
   }
 
   eliminarEmpleado(id: string): void {
     if (confirm('¿Estás seguro de eliminar este empleado?')) {
       this.empleadoService.eliminarEmpleado(id).subscribe({
-        next: () => this.obtenerEmpleados(),
-        error: (err) => console.error('Error al eliminar:', err)
+        next: () => {
+          this.obtenerEmpleados();
+          this.mostrarMensaje('Empleado eliminado');
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+          this.mostrarMensaje('Error al eliminar empleado');
+        }
       });
     }
   }
@@ -99,5 +110,11 @@ export class EmpleadosComponent implements OnInit, AfterViewInit {
       this.empleado.office.trim() !== '' &&
       this.empleado.salary > 0
     );
+  }
+
+  private mostrarMensaje(mensaje: string): void {
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000
+    });
   }
 }

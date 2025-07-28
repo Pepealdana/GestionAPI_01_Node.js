@@ -52,7 +52,9 @@ import { AppRoutingModule } from './app-routing.module';
     MatMenuModule,
     MatSidenavModule,
     MatTableModule,
-    MatListModule
+    MatListModule,
+    MatPaginatorModule,  // 👈 Agregado
+    MatSortModule        // 👈 Agregado
   ],
   providers: [],
   bootstrap: [AppComponent]
