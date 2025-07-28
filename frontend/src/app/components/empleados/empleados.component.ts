@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Empleado } from 'src/app/models/empleado';
+import { Empleado } from 'src/app/models/empleado.model';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 
 @Component({
@@ -9,10 +9,10 @@ import { EmpleadoService } from 'src/app/services/empleado.service';
 })
 export class EmpleadosComponent implements OnInit {
   empleado: Empleado = {
-    nombre: '',
-    cargo: '',
-    oficina: '',
-    salario: 0
+    name: '',
+    position: '',
+    office: '',
+    salary: 0
   };
 
   empleados: Empleado[] = [];
@@ -62,10 +62,10 @@ editarEmpleado(empleado: Empleado) {
 
   limpiarFormulario() {
     this.empleado = {
-      nombre: '',
-      cargo: '',
-      oficina: '',
-      salario: 0
+      name: '',
+      position: '',
+      office: '',
+      salary: 0
     };
   }
 }

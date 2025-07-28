@@ -1,17 +1,18 @@
-import { Empleado } from './empleado';
+import { Empleado } from './empleado.model';
 
 describe('Empleado interface', () => {
   it('should create a valid empleado object', () => {
     const empleado: Empleado = {
-      nombre: 'Juan Pérez',
-      cargo: 'Desarrollador',
-      salario: 3500,
-      oficina: ''
+      name: 'Juan Pérez',
+      position: 'Desarrollador',
+      salary: 3500,
+      office: 'Bogotá'
     };
 
     expect(empleado).toBeTruthy();
-    expect(empleado.nombre).toBe('Juan Pérez');
-    expect(empleado.cargo).toBe('Desarrollador');
-    expect(empleado.salario).toBeGreaterThan(0);
+    expect(empleado.name).toBe('Juan Pérez');
+    expect(empleado.position).toBe('Desarrollador');
+    expect(empleado.salary).toBeGreaterThan(0);
+    expect(empleado.office).toBe('Bogotá');
   });
 });
