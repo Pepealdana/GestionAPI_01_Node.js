@@ -209,3 +209,86 @@ npm run dev
 ---
 
 ✅ Conectado a MongoDB
+
+🌐 Frontend - Interfaz Angular (/FrontEnd)
+El frontend de este proyecto está desarrollado con Angular y usa Angular Material para la interfaz de usuario. Permite a los usuarios gestionar empleados, servicios y productos desde una única aplicación visualmente organizada en tarjetas, formularios y tablas.
+
+📦 Funcionalidades disponibles
+Formulario para crear/editar empleados, servicios y productos.
+
+Visualización en tablas tipo Angular Material con filtros, paginación y ordenamiento.
+
+Interacción directa con la API RESTful (conexión con el backend).
+
+Operaciones CRUD completas desde la interfaz.
+
+Diseño responsivo con layout adaptable.
+
+Panel de autenticación en desarrollo.
+
+▶️ Cómo iniciar el servidor Angular
+Asegúrate de tener Angular CLI instalado:
+
+bash
+Copiar
+Editar
+npm install -g @angular/cli
+Desde la carpeta /FrontEnd, instala las dependencias:
+
+bash
+Copiar
+Editar
+npm install
+Ejecuta el servidor de desarrollo:
+
+bash
+Copiar
+Editar
+ng serve
+Accede en tu navegador:
+
+arduino
+Copiar
+Editar
+http://localhost:4200
+🔁 Conexión con el Backend
+El frontend se conecta con el backend a través de servicios HTTP en Angular. Estos servicios están definidos en archivos como:
+
+empleado.service.ts
+
+servicio.service.ts
+
+producto.service.ts
+
+Cada uno hace solicitudes a la API correspondiente (/api/empleados, /api/servicios, /api/productos) usando HttpClient.
+
+💡 Importante: Asegúrate de que el backend esté corriendo en http://localhost:3000 o el puerto definido en .env, y que el archivo environment.ts tenga la URL correcta para la API:
+
+ts
+Copiar
+Editar
+// src/environments/environment.ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api' // <-- Reemplaza si cambias el puerto
+};
+📋 Estructura Angular simplificada
+graphql
+Copiar
+Editar
+FrontEnd/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── empleados/      # Componentes y vista empleados
+│   │   │   ├── servicios/      # Componentes y vista servicios
+│   │   │   ├── productos/      # Componentes y vista productos
+│   │   │   └── auth/           # (En construcción) Login y registro
+│   │   ├── services/           # Servicios HTTP que conectan al backend
+│   │   ├── models/             # Interfaces: Empleado, Servicio, Producto
+│   │   ├── app-routing.module.ts
+│   │   ├── app.component.ts
+│   │   └── app.module.ts
+│   ├── environments/
+│   │   ├── environment.ts      # URL base del backend
+│   │   └── environment.prod.ts
