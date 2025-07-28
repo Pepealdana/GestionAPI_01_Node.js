@@ -1,4 +1,149 @@
-/* You can add global styles to this file, and also import other style files */
+/* ===== RESET GLOBAL Y FUENTE ===== */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #eaeaea;
+  color: #2c3e50;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* ===== TARJETAS ===== */
+mat-card {
+  background-color: #ffffff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1rem !important;
+  margin: 1rem auto;
+  max-width: 600px;
+}
+
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ===== FORMULARIO MÁS COMPACTO Y VISUAL ===== */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 0.2rem !important; /* Muy poco espacio entre campos */
+}
+
+input.mat-input-element,
+textarea.mat-input-element {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 0.4rem 0.5rem;  /* Menos padding para altura más baja */
+  font-size: 0.95rem;
+}
+
+/* Ajusta la altura interna y alineación del input */
+.mat-form-field-infix {
+  padding: 0.1rem 0 !important; /* Reduce separación interna */
+  height: 2.5rem;               /* Altura más baja total */
+  display: flex;
+  align-items: center;
+}
+
+/* Bordes y estados visuales */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #444 !important;
+  border-color: #444 !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  border-color: #800020 !important;
+}
+
+.mat-form-field-appearance-outline:hover .mat-form-field-outline {
+  border-color: #ffffff !important;
+}
+
+mat-label {
+  color: #333 !important;
+  font-weight: 500;
+}
+
+/* ===== DISEÑO DE LAYOUT ===== */
+.empleado-layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.empleado-form-card {
+  flex: 1 1 400px;
+  max-width: 500px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== TABLA MEJORADA ===== */
+.tabla-empleados {
+  flex: 1 1 600px; /* Más ancha */
+  max-width: 700px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+table.mat-table {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.mat-header-cell {
+  background-color: #dfe6e9;
+  font-weight: bold;
+  color: #2d3436;
+}
+
+.mat-cell {
+  color: #2d3436;
+}
+
+/* ===== BOTONES ===== */
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+button {
+  text-transform: none !important;
+  font-weight: 500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .empleado-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  mat-card {
+    width: 95% !important;
+  }
+}
+
+.checkbox-container {
+  margin: 0.5rem 0 0.5rem 0.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label-fix {
+  display: inline;
+  font-size: 14px;
+  color: #333;
+}

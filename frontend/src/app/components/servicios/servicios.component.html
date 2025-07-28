@@ -1,31 +1,93 @@
-<mat-card class="servicio-card">
-  <mat-card-title class="center-text">GESTIÓN DE SERVICIOS</mat-card-title>
+<div class="empleado-layout">
+  <!-- Formulario de Servicios -->
+  <mat-card class="empleado-form-card">
+    <mat-card-title class="center-text">GESTIÓN DE SERVICIOS</mat-card-title>
 
-  <!-- Formulario para agregar un nuevo servicio -->
-  <form (ngSubmit)="guardarServicio()" class="servicio-form">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Nombre del Servicio</mat-label>
-      <input matInput placeholder="Ej: Limpieza, Soporte" [(ngModel)]="servicio.nombre" name="nombre" required />
-    </mat-form-field>
+    <form (ngSubmit)="guardarServicio()" class="empleado-form">
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Descripción</mat-label>
-      <textarea matInput placeholder="Describe el servicio" [(ngModel)]="servicio.descripcion" name="descripcion" required></textarea>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre del Servicio</mat-label>
+        <input matInput [(ngModel)]="servicio.nombre" name="nombre" required />
+      </mat-form-field>
 
-    <div class="button-row">
-      <button mat-raised-button color="primary" type="submit">GUARDAR</button>
-      <button mat-raised-button color="warn" type="button" (click)="limpiarFormulario()">LIMPIAR</button>
-    </div>
-  </form>
-</mat-card>
+      <mat-form-field appearance="outline">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput [(ngModel)]="servicio.descripcion" name="descripcion" required></textarea>
+      </mat-form-field>
 
-<!-- Lista de servicios existentes -->
-<div class="servicios-lista">
-  <mat-card *ngFor="let s of servicios" class="servicio-item">
-    <mat-card-title>{{ s.nombre }}</mat-card-title>
-    <mat-card-content>
-      <p>{{ s.descripcion }}</p>
-    </mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Precio</mat-label>
+        <input matInput type="number" [(ngModel)]="servicio.precio" name="precio" required />
+      </mat-form-field>
+
+      <!-- Checkbox para disponibilidad -->
+<div style="margin: 0.5rem 0;">
+  <mat-checkbox [(ngModel)]="servicio.disponible" name="disponible">
+    <span class="checkbox-label-fix">Disponible</span>
+  </mat-checkbox>
+</div>
+
+
+      <div class="button-row">
+        <button mat-raised-button color="primary" type="submit">
+          {{ servicio._id ? 'ACTUALIZAR' : 'GUARDAR' }}
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="limpiarFormulario()">LIMPIAR</button>
+      </div>
+    </form>
+  </mat-card>
+
+  <!-- Tabla de Servicios -->
+  <mat-card class="tabla-empleados">
+    <mat-card-title class="center-text">LISTADO DE SERVICIOS</mat-card-title>
+
+    <table mat-table [dataSource]="servicios" matSort class="full-width-table mat-elevation-z8">
+
+      <!-- Nombre -->
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+        <td mat-cell *matCellDef="let s">{{ s.nombre }}</td>
+      </ng-container>
+
+      <!-- Descripción -->
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+        <td mat-cell *matCellDef="let s">{{ s.descripcion }}</td>
+      </ng-container>
+
+      <!-- Precio -->
+      <ng-container matColumnDef="precio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
+        <td mat-cell *matCellDef="let s">{{ s.precio | currency:'COP' }}</td>
+      </ng-container>
+
+      <!-- Disponible -->
+      <ng-container matColumnDef="disponible">
+        <th mat-header-cell *matHeaderCellDef>Disponible</th>
+        <td mat-cell *matCellDef="let s">
+          <mat-icon color="{{ s.disponible ? 'primary' : 'warn' }}">
+            {{ s.disponible ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Acciones -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let s">
+          <button mat-icon-button color="accent" (click)="editarServicio(s)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="eliminarServicio(s._id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
   </mat-card>
 </div>

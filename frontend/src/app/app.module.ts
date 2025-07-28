@@ -17,6 +17,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 // Componentes propios
@@ -53,9 +54,11 @@ import { AppRoutingModule } from './app-routing.module';
     MatSidenavModule,
     MatTableModule,
     MatListModule,
-    MatPaginatorModule,  // 👈 Agregado
-    MatSortModule        // 👈 Agregado
-  ],
+    MatPaginatorModule,  
+    MatSortModule,        
+    MatCheckboxModule
+],
+
   providers: [],
   bootstrap: [AppComponent]
 })

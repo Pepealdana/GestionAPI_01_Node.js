@@ -1,85 +1,80 @@
-<!-- Formulario -->
-<div class="formulario">
-  <mat-card>
-    <mat-card-title>Formulario de Empleado</mat-card-title>
-    <mat-card-content>
-      <form (ngSubmit)="guardarEmpleado()" class="form-grid">
-        <mat-form-field appearance="fill" class="campo">
-          <mat-label>Nombre</mat-label>
-          <input matInput placeholder="Ingrese su nombre" [(ngModel)]="empleado.name" name="name" required />
-        </mat-form-field>
+<div class="empleado-layout">
+  <!-- Formulario a la izquierda -->
+  <mat-card class="empleado-form-card">
+    <mat-card-title class="center-text">GESTIÓN DE EMPLEADOS</mat-card-title>
 
-        <mat-form-field appearance="fill" class="campo">
-          <mat-label>Cargo</mat-label>
-          <input matInput placeholder="Ingrese su cargo" [(ngModel)]="empleado.position" name="position" required />
-        </mat-form-field>
+    <form (ngSubmit)="guardarEmpleado()" class="empleado-form">
+      <mat-form-field appearance="outline" class="compact-input">
+        <mat-label>Nombre</mat-label>
+        <input matInput [(ngModel)]="empleado.name" name="name" required />
+      </mat-form-field>
 
-        <mat-form-field appearance="fill" class="campo">
-          <mat-label>Oficina</mat-label>
-          <input matInput placeholder="Ingrese su lugar de trabajo" [(ngModel)]="empleado.office" name="office" required />
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="compact-input">
+        <mat-label>Cargo</mat-label>
+        <input matInput [(ngModel)]="empleado.position" name="position" required />
+      </mat-form-field>
 
-        <mat-form-field appearance="fill" class="campo">
-          <mat-label>Salario</mat-label>
-          <input matInput type="number" placeholder="Salario" [(ngModel)]="empleado.salary" name="salary" required />
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="compact-input">
+        <mat-label>Oficina</mat-label>
+        <input matInput [(ngModel)]="empleado.office" name="office" required />
+      </mat-form-field>
 
-        <div class="botones">
-          <button mat-raised-button color="primary" type="submit">
-            {{ empleado._id ? 'Actualizar' : 'Guardar' }}
-          </button>
-          <button mat-stroked-button color="accent" type="button" (click)="limpiarFormulario()">Limpiar</button>
-        </div>
-      </form>
-    </mat-card-content>
+      <mat-form-field appearance="outline" class="compact-input">
+        <mat-label>Salario</mat-label>
+        <input matInput type="number" [(ngModel)]="empleado.salary" name="salary" required />
+      </mat-form-field>
+
+      <div class="button-row">
+        <button mat-raised-button color="primary" type="submit">
+          {{ empleado._id ? 'ACTUALIZAR' : 'GUARDAR' }}
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="limpiarFormulario()">LIMPIAR</button>
+      </div>
+    </form>
   </mat-card>
-</div>
 
+  <!-- Tabla a la derecha -->
+  <mat-card class="tabla-empleados">
+    <mat-card-title class="center-text">LISTADO DE EMPLEADOS</mat-card-title>
 
-<!-- Tabla -->
-<div class="tabla">
-  <table mat-table [dataSource]="empleados" matSort class="mat-elevation-z8 tabla-responsive">
+    <table mat-table [dataSource]="empleados" matSort class="full-width-table mat-elevation-z8">
 
-    <!-- Nombre -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-      <td mat-cell *matCellDef="let e">{{ e.name }}</td>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+        <td mat-cell *matCellDef="let e">{{ e.name }}</td>
+      </ng-container>
 
-    <!-- Cargo -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cargo</th>
-      <td mat-cell *matCellDef="let e">{{ e.position }}</td>
-    </ng-container>
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cargo</th>
+        <td mat-cell *matCellDef="let e">{{ e.position }}</td>
+      </ng-container>
 
-    <!-- Oficina -->
-    <ng-container matColumnDef="office">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Oficina</th>
-      <td mat-cell *matCellDef="let e">{{ e.office }}</td>
-    </ng-container>
+      <ng-container matColumnDef="office">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Oficina</th>
+        <td mat-cell *matCellDef="let e">{{ e.office }}</td>
+      </ng-container>
 
-    <!-- Salario -->
-    <ng-container matColumnDef="salary">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Salario</th>
-      <td mat-cell *matCellDef="let e">{{ e.salary | currency }}</td>
-    </ng-container>
+      <ng-container matColumnDef="salary">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Salario</th>
+        <td mat-cell *matCellDef="let e">{{ e.salary | currency }}</td>
+      </ng-container>
 
-    <!-- Acciones -->
-    <ng-container matColumnDef="acciones">
-      <th mat-header-cell *matHeaderCellDef>Acciones</th>
-      <td mat-cell *matCellDef="let e">
-        <button mat-icon-button color="accent" (click)="editarEmpleado(e)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="eliminarEmpleado(e._id!)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let e">
+          <button mat-icon-button color="accent" (click)="editarEmpleado(e)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="eliminarEmpleado(e._id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+    </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+  </mat-card>
 </div>
