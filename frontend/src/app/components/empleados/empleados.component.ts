@@ -17,7 +17,7 @@ export class EmpleadosComponent implements OnInit {
 
   empleados: Empleado[] = [];
 
-  columnasTabla: string[] = ['name', 'position', 'office', 'salary', 'acciones']; // 👈 aquí va
+  columnasTabla: string[] = ['name', 'position', 'office', 'salary', 'acciones'];
 
   constructor(private empleadoService: EmpleadoService) {}
 
@@ -26,13 +26,17 @@ export class EmpleadosComponent implements OnInit {
   }
 
   guardarEmpleado() {
-    this.empleadoService.agregarEmpleado(this.empleado).subscribe({
+    const operacion = this.empleado._id
+      ? this.empleadoService.actualizarEmpleado(this.empleado._id, this.empleado)
+      : this.empleadoService.agregarEmpleado(this.empleado);
+
+    operacion.subscribe({
       next: () => {
         this.obtenerEmpleados();
         this.limpiarFormulario();
       },
       error: (err: any) => {
-        console.error('Error al guardar:', err);
+        console.error('Error al guardar/actualizar:', err);
       }
     });
   }
@@ -55,10 +59,9 @@ export class EmpleadosComponent implements OnInit {
     });
   }
 
-editarEmpleado(empleado: Empleado) {
-  this.empleado = { ...empleado }; // Clonamos el objeto para editar
-}
-
+  editarEmpleado(empleado: Empleado) {
+    this.empleado = { ...empleado }; // Clonamos el objeto con _id incluido
+  }
 
   limpiarFormulario() {
     this.empleado = {

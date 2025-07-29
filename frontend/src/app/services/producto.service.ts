@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductoService {
-  private apiUrl = 'http://localhost:3000/api/productos'; // Ajusta según tu backend
+  private apiUrl = 'http://localhost:3000/api/productos';
 
   constructor(private http: HttpClient) {}
 
@@ -21,5 +21,9 @@ export class ProductoService {
 
   eliminarProducto(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  actualizarProducto(id: string, producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto);
   }
 }
