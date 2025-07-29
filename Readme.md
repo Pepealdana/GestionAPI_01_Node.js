@@ -207,13 +207,4 @@ Al guardar, editar o eliminar, la tabla se actualiza automáticamente.
 
 ---
 
-## 📌 Próximos pasos sugeridos
-
-- Subida de imágenes (FormData)
-- Exportar a PDF/Excel
-- Dashboard estadístico
-- AuthGuard y roles de acceso
-
----
-
 ## 💻 Hecho con Node.js, Angular, MongoDB 💻
