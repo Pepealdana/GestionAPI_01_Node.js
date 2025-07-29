@@ -13,13 +13,12 @@ export class ServiciosComponent implements OnInit {
 
   columnasTabla: string[] = ['nombre', 'descripcion', 'precio', 'disponible', 'acciones'];
 
-servicio: Servicio = {
-  _id: '',
-  nombre: '',
-  descripcion: '',
-  precio: 0,
-  disponible: true
-};
+  servicio: Servicio = {
+    nombre: '',
+    descripcion: '',
+    precio: 0,
+    disponible: true
+  };
 
   constructor(private servicioService: ServicioService) {}
 
@@ -40,17 +39,21 @@ servicio: Servicio = {
       return;
     }
 
-    this.servicioService.crearServicio(this.servicio).subscribe(
-      (nuevoServicio) => {
-        this.servicios.push(nuevoServicio);
+    const operacion = this.servicio._id
+      ? this.servicioService.actualizarServicio(this.servicio._id, this.servicio)
+      : this.servicioService.crearServicio(this.servicio);
+
+    operacion.subscribe({
+      next: () => {
+        this.cargarServicios();
         this.limpiarFormulario();
       },
-      (error) => console.error('Error al guardar el servicio', error)
-    );
+      error: (error) => console.error('Error al guardar/actualizar el servicio', error)
+    });
   }
 
   editarServicio(servicio: Servicio): void {
-    this.servicio = { ...servicio };
+    this.servicio = { ...servicio }; // Se copia el servicio con su _id
   }
 
   eliminarServicio(id: string): void {

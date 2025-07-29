@@ -11,21 +11,23 @@ export class ProductosComponent implements OnInit {
 
   productos: Producto[] = [];
 
-producto: Producto = {
-  nombre: '',
-  descripcion: '',
-  precio: 0,
-  stock: 0,
-  categoria: ''
-};
+  producto: Producto = {
+    nombre: '',
+    descripcion: '',
+    precio: 0,
+    stock: 0,
+    categoria: ''
+  };
 
-
-columnasTabla: string[] = ['nombre', 'descripcion', 'precio', 'stock', 'categoria', 'acciones'];
-
+  columnasTabla: string[] = ['nombre', 'descripcion', 'precio', 'stock', 'categoria', 'acciones'];
 
   constructor(private productoService: ProductoService) {}
 
   ngOnInit(): void {
+    this.cargarProductos();
+  }
+
+  cargarProductos(): void {
     this.productoService.obtenerProductos().subscribe(
       (data) => this.productos = data,
       (error) => console.error('Error al cargar los productos', error)
@@ -33,17 +35,26 @@ columnasTabla: string[] = ['nombre', 'descripcion', 'precio', 'stock', 'categori
   }
 
   guardarProducto(): void {
-    this.productoService.crearProducto(this.producto).subscribe(
-      (nuevoProducto) => {
-        this.productos.push(nuevoProducto);
+    if (!this.producto.nombre || this.producto.precio <= 0) {
+      console.warn('Datos incompletos o inválidos');
+      return;
+    }
+
+    const operacion = this.producto._id
+      ? this.productoService.actualizarProducto(this.producto._id, this.producto)
+      : this.productoService.crearProducto(this.producto);
+
+    operacion.subscribe({
+      next: () => {
+        this.cargarProductos(); // Refresca la tabla automáticamente
         this.limpiarFormulario();
       },
-      (error) => console.error('Error al guardar el producto', error)
-    );
+      error: (error) => console.error('Error al guardar/actualizar el producto', error)
+    });
   }
 
   editarProducto(producto: Producto): void {
-    this.producto = { ...producto };
+    this.producto = { ...producto }; // Clonamos con su _id para que se pueda actualizar
   }
 
   eliminarProducto(id: string): void {
@@ -55,15 +66,13 @@ columnasTabla: string[] = ['nombre', 'descripcion', 'precio', 'stock', 'categori
     );
   }
 
-limpiarFormulario(): void {
-  this.producto = {
-    nombre: '',
-    descripcion: '',
-    precio: 0,
-    stock: 0,
-    categoria: ''
-  };
-}
-
+  limpiarFormulario(): void {
+    this.producto = {
+      nombre: '',
+      descripcion: '',
+      precio: 0,
+      stock: 0,
+      categoria: ''
+    };
   }
-
+}
