@@ -1,249 +1,219 @@
 
-# 📦 Sistema de Gestión CRUD con Angular, Node.js y MongoDB
+# 📦 Sistema CRUD con Angular, Node.js y MongoDB
 
-Este proyecto permite gestionar **Empleados**, **Servicios** y **Productos** mediante una interfaz moderna en Angular y una API RESTful construida con Node.js y MongoDB. Incorpora autenticación segura mediante JWT.
-
----
-
-## 🔍 Descripción General
-
-Combina:
-- **Frontend**: Angular + Angular Material
-- **Backend**: Node.js + Express + MongoDB
-
-Permite:
-- Operaciones CRUD completas en empleados, productos y servicios
-- Registro e inicio de sesión de usuarios
-- Protección de rutas con token JWT
-- Interfaz responsiva con Angular Material
+Este sistema permite gestionar empleados, servicios, productos y usuarios, con autenticación segura mediante JWT (JSON Web Tokens).
 
 ---
 
-## 🗂 Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
+```
 GESTION-EMPLEADOS/
 ├── BackEnd/
-│ ├── controllers/
-│ ├── middlewares/
-│ ├── models/
-│ ├── routes/
-│ ├── database.js
-│ └── index.js
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── models/
+│   ├── routes/
+│   ├── database.js
+│   └── index.js
 ├── FrontEnd/
-│ ├── src/
-│ │ ├── app/
-│ │ │ ├── components/
-│ │ │ │ ├── empleados/
-│ │ │ │ ├── servicios/
-│ │ │ │ ├── productos/
-│ │ │ │ └── auth/
-│ │ │ ├── services/
-│ │ │ ├── models/
-│ │ │ ├── app-routing.module.ts
-│ │ │ └── app.module.ts
-│ │ └── environments/
-│ │ ├── environment.ts
-│ │ └── environment.prod.ts
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── components/
+│   │   │   │   ├── empleados/
+│   │   │   │   ├── servicios/
+│   │   │   │   ├── productos/
+│   │   │   │   └── auth/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   ├── app-routing.module.ts
+│   │   │   ├── app.module.ts
+│   │   └── environments/
+│   │       ├── environment.ts
+│   │       └── environment.prod.ts
 ├── .env
 ├── package.json
 └── README.md
-
+```
 
 ---
 
-## 🚀 Iniciar el Proyecto en Local
+## 🧪 Tecnologías utilizadas
 
-### 🖥 Backend
+**Backend**: Node.js, Express, MongoDB (Mongoose), JWT, dotenv, nodemon  
+**Frontend**: Angular (v16+), Angular Material, TypeScript, RxJS, HttpClient
 
-1. Abre terminal en la carpeta `BackEnd/`
-2. Instala dependencias:
-   ```bash
-   npm install
-Crea un archivo .env con el siguiente contenido:
+---
 
+## 🔐 Autenticación JWT
 
+Las rutas protegidas requieren un token en el encabezado `Authorization: Bearer <token>`
 
+### Registro
+
+```
+POST /api/auth/register
+```
+
+```json
+{
+  "nombre": "admin01",
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+```
+
+### Login
+
+```
+POST /api/auth/login
+```
+
+```json
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+```
+
+### Uso del token JWT
+
+```
+Authorization: Bearer TU_TOKEN
+```
+
+---
+
+## 🖥 Backend: Instrucciones de uso
+
+1. Abre terminal en `BackEnd/`
+2. Ejecuta `npm install`
+3. Crea archivo `.env`:
+
+```
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/gestion
 SECRET_KEY=tu_clave_secreta
-Ejecuta el servidor:
+```
 
+4. Inicia el servidor:
 
-
+```
 npm run dev
-Accede a la API en:
-👉 http://localhost:3000/api
+```
 
-🌐 Frontend
-Abre una segunda terminal en FrontEnd/
+5. Abre `http://localhost:3000/api`
 
-Instala dependencias:
+### CRUD Backend (usando Postman o cualquier cliente HTTP)
 
+**Empleados**
 
-
-npm install
-Configura el entorno en src/environments/environment.ts:
-
-ts
-Copiar
-Editar
-export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/api'
-};
-Ejecuta Angular:
-
-
-
-ng serve
-Abre tu navegador en:
-👉 http://localhost:4200
-
-✅ Operaciones CRUD - Backend
-✍️ Empleados (/api/empleados)
-
-
+```
+GET /api/empleados
 POST /api/empleados
-Content-Type: application/json
+PUT /api/empleados/:id
+DELETE /api/empleados/:id
+```
 
+```json
 {
   "name": "Luis Pérez",
   "position": "Desarrollador",
   "office": "Bogotá",
   "salary": 4000000
 }
+```
 
+**Servicios**
 
-GET /api/empleados
-
-
-PUT /api/empleados/:id
-Content-Type: application/json
-
-{
-  "name": "Luis Pérez",
-  "position": "Senior Dev",
-  "office": "Medellín",
-  "salary": 5000000
-}
-
-
-DELETE /api/empleados/:id
-⚙️ Servicios (/api/servicios)
-
-
+```
+GET /api/servicios
 POST /api/servicios
+PUT /api/servicios/:id
+DELETE /api/servicios/:id
+```
+
+```json
 {
   "nombre": "Mantenimiento",
   "descripcion": "Mantenimiento preventivo",
   "precio": 150000
 }
+```
 
+**Productos**
 
-GET /api/servicios```
-
-```http
-PUT /api/servicios/:id
-{
-  "nombre": "Reparación",
-  "precio": 200000
-}
-
-
-DELETE /api/servicios/:id
-🛒 Productos (/api/productos)
-
-
+```
+GET /api/productos
 POST /api/productos
+PUT /api/productos/:id
+DELETE /api/productos/:id
+```
+
+```json
 {
   "nombre": "Impresora HP",
   "categoria": "Tecnología",
   "precio": 850000,
   "stock": 12
 }
+```
 
+---
 
-GET /api/productos
+## 🌐 Frontend: Instrucciones de uso
 
+1. Abre terminal en `FrontEnd/`
+2. Ejecuta `npm install`
+3. Verifica que en `src/environments/environment.ts` esté la URL correcta:
 
-PUT /api/productos/:id
-{
-  "stock": 8
-}
+```ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api'
+};
+```
 
+4. Inicia el servidor Angular:
 
+```
+ng serve
+```
 
-DELETE /api/productos/:id
-🔐 Autenticación JWT
-Registro (POST /api/auth/register)
+5. Abre `http://localhost:4200` en el navegador
 
+---
 
-{
-  "nombre": "admin01",
-  "email": "admin@example.com",
-  "password": "admin123"
-}
-Login (POST /api/auth/login)
-json
-Copiar
-Editar
-{
-  "email": "admin@example.com",
-  "password": "admin123"
-}
-Enviar token en rutas protegidas
-Header:
+## 🧠 Funcionamiento del Frontend
 
+Cada módulo (empleados, servicios, productos) tiene su propio componente y servicio HTTP:
 
-Authorization: Bearer TU_TOKEN
-✅ Operaciones CRUD - Frontend Angular
-Formulario dinámico para guardar y actualizar
+- Los formularios usan `[(ngModel)]` para enlazar datos.
+- Las peticiones usan `HttpClient`.
+- Las tablas usan `mat-table`, `mat-paginator`, `mat-sort`.
+- Angular Material da diseño responsivo y moderno.
 
-Tabla con Angular Material (mat-table, mat-sort, mat-paginator)
+Al guardar, editar o eliminar, la tabla se actualiza automáticamente.
 
-Botones de acción para editar y eliminar
+---
 
-🎨 Angular Material
-Se migró desde Materialize a Angular Material para:
+## 🧪 Testing con Postman
 
-Mejor integración con Angular
+1. Importa `API_Gestion_Empleados_FULL.postman_collection.json`
+2. Regístrate e inicia sesión para obtener el token JWT
+3. Agrega el token como header:
+   - Key: `Authorization`
+   - Value: `Bearer <tu_token>`
 
-Uso de componentes como:
+---
 
-mat-card
+## 📌 Próximos pasos sugeridos
 
-mat-form-field
+- Subida de imágenes (FormData)
+- Exportar a PDF/Excel
+- Dashboard estadístico
+- AuthGuard y roles de acceso
 
-mat-input
+---
 
-mat-table
-
-mat-paginator
-
-mat-icon
-
-Ventajas:
-
-Diseño responsivo
-
-Interacción fluida y accesible
-
-Actualización automática de tabla tras guardar o editar
-
-🧪 Pruebas con Postman
-Inicia el backend:
-
-
-npm run dev
-Abre Postman e importa el archivo:
-
-
-API_Gestion_Empleados_FULL.postman_collection.json
-Usa las rutas de ejemplo para probar CRUD y autenticación.
-
-📁 Archivos Clave
-.env: configuración del puerto, clave y URI MongoDB
-
-environment.ts: URL del backend para Angular
-
-API_Gestion_Empleados_FULL.postman_collection.json: colección completa de pruebas
+## 💻 Hecho con Node.js, Angular, MongoDB 💻
