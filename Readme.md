@@ -1,65 +1,59 @@
-# Proyecto API REST - Gestión de Empleados, Servicios, Productos y Autenticación
 
-Este proyecto consiste en una API RESTful desarrollada con **Node.js**, **Express** y **MongoDB**, que permite gestionar empleados, servicios, productos y usuarios, así como realizar autenticación segura con JWT (JSON Web Tokens). Los usuarios pueden registrarse e iniciar sesión mediante rutas específicas (/api/auth/register y /api/auth/login). Al autenticarse, reciben un **token JWT** que deben enviar en el encabezado Authorization en cada solicitud a rutas protegidas. El backend valida este token para permitir el acceso solo a usuarios autorizados.
+# 📦 Sistema CRUD con Angular, Node.js y MongoDB
 
-Una API RESTful es una interfaz que sigue los principios de REST (Representational State Transfer). Se caracteriza por:
+Este sistema permite gestionar empleados, servicios, productos y usuarios, con autenticación segura mediante JWT (JSON Web Tokens).
 
-📍 Utilizar HTTP: opera con métodos como **GET**, **POST**, **PUT**, **DELETE** para manipular recursos.
-🧩 Recursos identificados por URLs: por ejemplo, /api/empleados representa la colección de empleados.
-📦 Datos en formato JSON o XML: en este proyecto se usa JSON.
-🔁 Sin estado (stateless): cada petición al servidor debe contener toda la información necesaria para procesarla.
-🔄 Operaciones CRUD claras: permite crear, leer, actualizar y eliminar datos.
+---
 
 ## 📁 Estructura del Proyecto
 
 ```
-GESTION-EMPLEADOS
-├──BackEnd/
-│    ├── controllers/         # Lógica para cada módulo
-│    │   ├── empleado.controller.js
-│    │   ├── servicio.controller.js
-│    │   ├── producto.controller.js
-│    │   ├── usuario.controller.js
-│    │   └── auth.controller.js
-│    ├── middlewares/         # Esquemas de validación
-│    │   ├── isAdmin.js
-│    │   └── verifyToken.js
-│    ├── models/              # Esquemas de modelos
-│    │   ├── empleado.js
-│    │   ├── servicio.js
-│    │   ├── producto.js
-│    │   └── usuario.js
-│    ├── postman/             # Herramienta de pruebas
-│    │   └──  gestion_empleados_collection.json
-│    ├── routes/              # Rutas de cada módulo
-│    │   ├── empleado.routes.js
-│    │   ├── servicio.routes.js
-│    │   ├── producto.routes.js
-│    │   ├── usuario.routes.js
-│    │   └── auth.routes.js
-│    ├── database.js          # Conexión a MongoDB
-│    ├── empleado.js          
-│    └── index.js             # Archivo principal del  servidor
-├── .env                      # Variables de entorno (puerto y URI de MongoDB)
-├── packkage.json             # Define el proyecto, scripts y dependencias generales
-└── package-lock.json         # Versiones del proyecto
+GESTION-EMPLEADOS/
+├── BackEnd/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── models/
+│   ├── routes/
+│   ├── database.js
+│   └── index.js
+├── FrontEnd/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── components/
+│   │   │   │   ├── empleados/
+│   │   │   │   ├── servicios/
+│   │   │   │   ├── productos/
+│   │   │   │   └── auth/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   ├── app-routing.module.ts
+│   │   │   ├── app.module.ts
+│   │   └── environments/
+│   │       ├── environment.ts
+│   │       └── environment.prod.ts
+├── .env
+├── package.json
+└── README.md
 ```
 
-## 🚀 Tecnologías Utilizadas
+---
 
-* Node.js
-* Express
-* MongoDB + Mongoose
-* Postman (para testing)
-* dotenv (configuración)
-* nodemon (modo desarrollo)
+## 🧪 Tecnologías utilizadas
 
-## 🔐 Autenticación con JWT
+**Backend**: Node.js, Express, MongoDB (Mongoose), JWT, dotenv, nodemon  
+**Frontend**: Angular (v16+), Angular Material, TypeScript, RxJS, HttpClient
 
-## 🔐 Autenticación (`/api/auth`)
+---
 
-### Registro (`POST /api/auth/register`)
-Crea un nuevo usuario con contraseña segura y devuelve un token JWT.
+## 🔐 Autenticación JWT
+
+Las rutas protegidas requieren un token en el encabezado `Authorization: Bearer <token>`
+
+### Registro
+
+```
+POST /api/auth/register
+```
 
 ```json
 {
@@ -69,8 +63,11 @@ Crea un nuevo usuario con contraseña segura y devuelve un token JWT.
 }
 ```
 
-### Login (`POST /api/auth/login`)
-Devuelve un token si el correo y contraseña coinciden.
+### Login
+
+```
+POST /api/auth/login
+```
 
 ```json
 {
@@ -79,49 +76,45 @@ Devuelve un token si el correo y contraseña coinciden.
 }
 ```
 
-### 🪪 Usar el token JWT
-Copia el token recibido y úsalo en las rutas protegidas como esta:
+### Uso del token JWT
 
 ```
 Authorization: Bearer TU_TOKEN
 ```
 
-En Postman:
-- Ve a la pestaña **Headers**
-- Agrega:  
-  - Key: `Authorization`  
-  - Value: `Bearer eyJhbGciOi...` (tu token)
-
 ---
 
-## 👤 Usuarios (`/api/usuarios`)
+## 🖥 Backend: Instrucciones de uso
 
-- `POST` – Crea un nuevo usuario (por ejemplo, desde un panel admin)
-- `GET` – Lista todos los usuarios (requiere token)
-- `GET /:id` – Trae los datos de un usuario específico
-- `PUT /:id` – Modifica datos de un usuario existente (admin)
-- `DELETE /:id` – Elimina a un usuario (admin)
-- `PATCH /cambiar-rol/:id` – Cambia el rol de usuario a `admin` o `usuario`
-- `GET /perfil` – Devuelve la información del usuario autenticado (requiere token)
+1. Abre terminal en `BackEnd/`
+2. Ejecuta `npm install`
+3. Crea archivo `.env`:
 
-🛠️ **Ejemplo para crear usuario**:
-```json
-{
-  "nombre": "Camila",
-  "email": "camila@example.com",
-  "telefono": "3121234567",
-  "rol": "usuario",
-  "password": "123456"
-}
+```
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/gestion
+SECRET_KEY=tu_clave_secreta
 ```
 
----
+4. Inicia el servidor:
 
-## 👨‍💼 Empleados (`/api/empleados`)
+```
+npm run dev
+```
 
-Permite CRUD completo (Crear, Leer, Actualizar, Eliminar) de empleados.
+5. Abre `http://localhost:3000/api`
 
-🛠️ **Ejemplo POST**:
+### CRUD Backend (usando Postman o cualquier cliente HTTP)
+
+**Empleados**
+
+```
+GET /api/empleados
+POST /api/empleados
+PUT /api/empleados/:id
+DELETE /api/empleados/:id
+```
+
 ```json
 {
   "name": "Luis Pérez",
@@ -131,13 +124,15 @@ Permite CRUD completo (Crear, Leer, Actualizar, Eliminar) de empleados.
 }
 ```
 
----
+**Servicios**
 
-## 🧰 Servicios (`/api/servicios`)
+```
+GET /api/servicios
+POST /api/servicios
+PUT /api/servicios/:id
+DELETE /api/servicios/:id
+```
 
-Gestiona los servicios que ofrece la empresa.
-
-🛠️ **Ejemplo POST**:
 ```json
 {
   "nombre": "Mantenimiento",
@@ -146,13 +141,15 @@ Gestiona los servicios que ofrece la empresa.
 }
 ```
 
----
+**Productos**
 
-## 📦 Productos (`/api/productos`)
+```
+GET /api/productos
+POST /api/productos
+PUT /api/productos/:id
+DELETE /api/productos/:id
+```
 
-Administra los productos del inventario.
-
-🛠️ **Ejemplo POST**:
 ```json
 {
   "nombre": "Impresora HP",
@@ -164,131 +161,59 @@ Administra los productos del inventario.
 
 ---
 
-## ▶️ Iniciar el Servidor
+## 🌐 Frontend: Instrucciones de uso
 
-```bash
-npm install
-npm run dev
+1. Abre terminal en `FrontEnd/`
+2. Ejecuta `npm install`
+3. Verifica que en `src/environments/environment.ts` esté la URL correcta:
+
+```ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api'
+};
 ```
+
+4. Inicia el servidor Angular:
+
+```
+ng serve
+```
+
+5. Abre `http://localhost:4200` en el navegador
+
+---
+
+## 🧠 Funcionamiento del Frontend
+
+Cada módulo (empleados, servicios, productos) tiene su propio componente y servicio HTTP:
+
+- Los formularios usan `[(ngModel)]` para enlazar datos.
+- Las peticiones usan `HttpClient`.
+- Las tablas usan `mat-table`, `mat-paginator`, `mat-sort`.
+- Angular Material da diseño responsivo y moderno.
+
+Al guardar, editar o eliminar, la tabla se actualiza automáticamente.
 
 ---
 
 ## 🧪 Testing con Postman
 
-1. Ejecuta el servidor:  
-   ```bash
-   npm run dev
-   ```
-
-2. Abre **Postman**
-
-3. Ve a `Importar → Archivo` y selecciona:  
-   📦 `API_Gestion_Empleados_FULL.postman_collection.json`
-
-4. Usa los endpoints incluidos para:
-   - Registrar usuarios
-   - Hacer login
-   - Obtener el token
-   - Usar el token en rutas protegidas
-   - Probar POST, GET, PUT y DELETE para cada módulo
+1. Importa `API_Gestion_Empleados_FULL.postman_collection.json`
+2. Regístrate e inicia sesión para obtener el token JWT
+3. Agrega el token como header:
+   - Key: `Authorization`
+   - Value: `Bearer <tu_token>`
 
 ---
 
-## 📁 Archivos útiles
+## 📌 Próximos pasos sugeridos
 
-- `.env` → configuración de claves y URI de MongoDB
-- `API_Gestion_Empleados_FULL.postman_collection.json` → colección completa para Postman
-
----
-
-## 📌 Notas
-
-* MongoDB debe estar corriendo localmente (por ejemplo, en `mongodb://localhost:27017/empleados`)
-* Las colecciones se crean automáticamente cuando se insertan datos por primera vez
+- Subida de imágenes (FormData)
+- Exportar a PDF/Excel
+- Dashboard estadístico
+- AuthGuard y roles de acceso
 
 ---
 
-✅ Conectado a MongoDB
-
-🌐 Frontend - Interfaz Angular (/FrontEnd)
-El frontend de este proyecto está desarrollado con Angular y usa Angular Material para la interfaz de usuario. Permite a los usuarios gestionar empleados, servicios y productos desde una única aplicación visualmente organizada en tarjetas, formularios y tablas.
-
-📦 Funcionalidades disponibles
-Formulario para crear/editar empleados, servicios y productos.
-
-Visualización en tablas tipo Angular Material con filtros, paginación y ordenamiento.
-
-Interacción directa con la API RESTful (conexión con el backend).
-
-Operaciones CRUD completas desde la interfaz.
-
-Diseño responsivo con layout adaptable.
-
-Panel de autenticación en desarrollo.
-
-▶️ Cómo iniciar el servidor Angular
-Asegúrate de tener Angular CLI instalado:
-
-bash
-Copiar
-Editar
-npm install -g @angular/cli
-Desde la carpeta /FrontEnd, instala las dependencias:
-
-bash
-Copiar
-Editar
-npm install
-Ejecuta el servidor de desarrollo:
-
-bash
-Copiar
-Editar
-ng serve
-Accede en tu navegador:
-
-arduino
-Copiar
-Editar
-http://localhost:4200
-🔁 Conexión con el Backend
-El frontend se conecta con el backend a través de servicios HTTP en Angular. Estos servicios están definidos en archivos como:
-
-empleado.service.ts
-
-servicio.service.ts
-
-producto.service.ts
-
-Cada uno hace solicitudes a la API correspondiente (/api/empleados, /api/servicios, /api/productos) usando HttpClient.
-
-💡 Importante: Asegúrate de que el backend esté corriendo en http://localhost:3000 o el puerto definido en .env, y que el archivo environment.ts tenga la URL correcta para la API:
-
-ts
-Copiar
-Editar
-// src/environments/environment.ts
-export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/api' // <-- Reemplaza si cambias el puerto
-};
-📋 Estructura Angular simplificada
-graphql
-Copiar
-Editar
-FrontEnd/
-├── src/
-│   ├── app/
-│   │   ├── components/
-│   │   │   ├── empleados/      # Componentes y vista empleados
-│   │   │   ├── servicios/      # Componentes y vista servicios
-│   │   │   ├── productos/      # Componentes y vista productos
-│   │   │   └── auth/           # (En construcción) Login y registro
-│   │   ├── services/           # Servicios HTTP que conectan al backend
-│   │   ├── models/             # Interfaces: Empleado, Servicio, Producto
-│   │   ├── app-routing.module.ts
-│   │   ├── app.component.ts
-│   │   └── app.module.ts
-│   ├── environments/
-│   │   ├── environment.ts      # URL base del backend
-│   │   └── environment.prod.ts
+## 💻 Hecho con Node.js, Angular, MongoDB 💻
