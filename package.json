@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "API RESTful para gestión de empleados, servicios, productos y usuarios con autenticación JWT.",
   "main": "index.js",
- "scripts": {
-  "dev": "nodemon BackEnd/index.js",
-  "start": "node BackEnd/index.js",
-  "test": "cross-env NODE_ENV=test jest --runInBand"
-},
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test:backend": "cross-env NODE_ENV=test jest --runInBand",
+    "test:frontend": "cd ../frontend && ng test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
