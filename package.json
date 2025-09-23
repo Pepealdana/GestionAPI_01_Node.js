@@ -1,19 +1,12 @@
 {
-  "name": "gestion-empleados",
+  "name": "gestion-empleados-backend",
   "version": "1.0.0",
-  "description": "API RESTful para gestión de empleados, servicios, productos y usuarios con autenticación JWT.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "npm run test:backend",
-    "test:backend": "cross-env NODE_ENV=test jest --runInBand",
-    "test:frontend": "cd ../frontend && ng test",
-    "test:all": "npm run test:backend && npm run test:frontend"
+    "test": "cross-env NODE_ENV=test jest --runInBand"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
@@ -30,6 +23,8 @@
     "supertest": "^7.1.4"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testMatch": ["**/test/**/*.spec.js"], 
+    "transform": {}
   }
 }

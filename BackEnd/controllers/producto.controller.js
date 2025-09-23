@@ -87,7 +87,7 @@ productoCtrl.eliminarProducto = async (req, res) => {
     }
 
     res.status(200).json({
-      message: 'Producto eliminado',
+      status: 'Producto eliminado', // <-- ahora es "status" como en empleados
       producto
     });
   } catch (error) {

@@ -87,7 +87,7 @@ servicioCtrl.eliminarServicio = async (req, res) => {
     }
 
     res.status(200).json({
-      message: 'Servicio eliminado',
+      status: 'Servicio eliminado', // <-- consistente con empleado.controller.js
       servicio
     });
   } catch (error) {

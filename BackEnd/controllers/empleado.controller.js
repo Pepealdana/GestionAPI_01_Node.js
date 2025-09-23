@@ -87,7 +87,7 @@ empleadoCtrl.eliminarEmpleado = async (req, res) => {
     }
 
     res.status(200).json({
-      message: 'Empleado eliminado',
+      status: 'Empleado eliminado', // <-- corregido para que coincida con el test
       empleado
     });
   } catch (error) {

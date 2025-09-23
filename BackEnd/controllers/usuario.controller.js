@@ -8,7 +8,10 @@ usuarioCtrl.getUsuarios = async (req, res) => {
     const usuarios = await Usuario.find();
     res.status(200).json(usuarios);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los usuarios', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al obtener los usuarios',
+      detalle: error.message
+    });
   }
 };
 
@@ -21,7 +24,10 @@ usuarioCtrl.getUnicoUsuario = async (req, res) => {
     }
     res.status(200).json(usuario);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el usuario', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al obtener el usuario',
+      detalle: error.message
+    });
   }
 };
 
@@ -41,12 +47,19 @@ usuarioCtrl.createUsuario = async (req, res) => {
   try {
     const usuario = new Usuario({ nombre, email, telefono, rol });
     const nuevoUsuario = await usuario.save();
-    res.status(201).json(nuevoUsuario); // devolvemos el objeto creado
+
+    res.status(201).json({
+      status: 'Usuario creado',
+      usuario: nuevoUsuario
+    });
   } catch (err) {
     if (err.code === 11000 && err.keyPattern?.email) {
       res.status(400).json({ error: 'El correo ya está registrado.' });
     } else {
-      res.status(500).json({ error: 'Error al crear el usuario', detalle: err.message });
+      res.status(500).json({
+        error: 'Error al crear el usuario',
+        detalle: err.message
+      });
     }
   }
 };
@@ -73,15 +86,25 @@ usuarioCtrl.editarUsuario = async (req, res) => {
 
     const usuarioEditado = { nombre, email, telefono, rol };
 
-    const usuario = await Usuario.findByIdAndUpdate(id, { $set: usuarioEditado }, { new: true });
+    const usuario = await Usuario.findByIdAndUpdate(
+      id,
+      { $set: usuarioEditado },
+      { new: true }
+    );
 
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    res.status(200).json(usuario); // devolvemos el objeto actualizado
+    res.status(200).json({
+      status: 'Usuario actualizado',
+      usuario
+    });
   } catch (err) {
-    res.status(500).json({ error: 'Error al actualizar el usuario', detalle: err.message });
+    res.status(500).json({
+      error: 'Error al actualizar el usuario',
+      detalle: err.message
+    });
   }
 };
 
@@ -94,9 +117,15 @@ usuarioCtrl.eliminarUsuario = async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    res.status(200).json({ message: 'Usuario eliminado', usuario });
+    res.status(200).json({
+      status: 'Usuario eliminado',
+      usuario
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el usuario', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al eliminar el usuario',
+      detalle: error.message
+    });
   }
 };
 
