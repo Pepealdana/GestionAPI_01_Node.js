@@ -1,13 +1,11 @@
 const request = require("supertest");
-const app = require("../index"); // tu servidor principal
+const app = require("../index"); // servidor principal
 const mongoose = require("mongoose");
 
-// Datos de prueba
-let empleadoId;
+let empleadoId; // Guardaremos el ID del empleado creado
 
 describe("CRUD Empleados API", () => {
   beforeAll(async () => {
-    // Aseguramos la conexión a Mongo
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
@@ -30,9 +28,12 @@ describe("CRUD Empleados API", () => {
         office: "Bogotá",
         salary: 3500000,
       });
-    expect(res.statusCode).toEqual(201);
+
+    expect(res.statusCode).toEqual(201); // ahora es 201
     expect(res.body).toHaveProperty("_id");
-    empleadoId = res.body._id;
+    expect(res.body).toHaveProperty("name", "Juan Pérez");
+
+    empleadoId = res.body._id; // Guardamos el ID para siguientes pruebas
   });
 
   // READ (Todos)
@@ -40,6 +41,7 @@ describe("CRUD Empleados API", () => {
     const res = await request(app).get("/api/empleados");
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
   });
 
   // READ (Uno por ID)
@@ -59,14 +61,18 @@ describe("CRUD Empleados API", () => {
         office: "Medellín",
         salary: 5000000,
       });
+
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("position", "Senior Dev");
+    expect(res.body).toHaveProperty("office", "Medellín");
   });
 
   // DELETE
   it("Debería eliminar un empleado", async () => {
     const res = await request(app).delete(`/api/empleados/${empleadoId}`);
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty("message");
+    expect(res.body).toHaveProperty("status", "Empleado eliminado");
+    expect(res.body).toHaveProperty("empleado");
+    expect(res.body.empleado).toHaveProperty("_id", empleadoId);
   });
 });

@@ -8,7 +8,10 @@ empleadoCtrl.getEmpleados = async (req, res) => {
     const empleados = await Empleado.find();
     res.status(200).json(empleados);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener empleados', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al obtener empleados',
+      detalle: error.message
+    });
   }
 };
 
@@ -22,10 +25,14 @@ empleadoCtrl.createEmpleados = async (req, res) => {
     }
 
     const empleado = new Empleado({ name, position, office, salary });
-    await empleado.save();
-    res.status(201).json(empleado); // 201 y objeto creado
+    const nuevoEmpleado = await empleado.save();
+
+    res.status(201).json(nuevoEmpleado); // devolvemos el objeto creado
   } catch (error) {
-    res.status(500).json({ error: 'Error al guardar el empleado', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al guardar el empleado',
+      detalle: error.message
+    });
   }
 };
 
@@ -38,7 +45,10 @@ empleadoCtrl.getUnicoEmpleado = async (req, res) => {
     }
     res.status(200).json(empleado);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el empleado', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al obtener el empleado',
+      detalle: error.message
+    });
   }
 };
 
@@ -46,23 +56,24 @@ empleadoCtrl.getUnicoEmpleado = async (req, res) => {
 empleadoCtrl.editarEmpleado = async (req, res) => {
   try {
     const { id } = req.params;
+    const { name, position, office, salary } = req.body;
 
-    const empleadoEditado = {
-      name: req.body.name,
-      position: req.body.position,
-      office: req.body.office,
-      salary: req.body.salary,
-    };
-
-    const empleado = await Empleado.findByIdAndUpdate(id, { $set: empleadoEditado }, { new: true });
+    const empleado = await Empleado.findByIdAndUpdate(
+      id,
+      { $set: { name, position, office, salary } },
+      { new: true }
+    );
 
     if (!empleado) {
       return res.status(404).json({ error: 'Empleado no encontrado' });
     }
 
-    res.status(200).json(empleado); // devolvemos empleado actualizado
+    res.status(200).json(empleado); // devolvemos el objeto actualizado
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar el empleado', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al actualizar el empleado',
+      detalle: error.message
+    });
   }
 };
 
@@ -75,9 +86,15 @@ empleadoCtrl.eliminarEmpleado = async (req, res) => {
       return res.status(404).json({ error: 'Empleado no encontrado' });
     }
 
-    res.status(200).json({ status: 'Empleado eliminado', empleado });
+    res.status(200).json({
+      message: 'Empleado eliminado',
+      empleado
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el empleado', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al eliminar el empleado',
+      detalle: error.message
+    });
   }
 };
 

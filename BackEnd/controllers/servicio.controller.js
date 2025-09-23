@@ -8,7 +8,10 @@ servicioCtrl.getServicios = async (req, res) => {
     const servicios = await Servicio.find();
     res.status(200).json(servicios);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los servicios', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al obtener los servicios',
+      detalle: error.message
+    });
   }
 };
 
@@ -22,23 +25,30 @@ servicioCtrl.createServicio = async (req, res) => {
     }
 
     const servicio = new Servicio({ nombre, descripcion, precio, disponible });
-    await servicio.save();
-    res.status(201).json(servicio); // devolvemos el objeto creado
+    const nuevoServicio = await servicio.save();
+
+    res.status(201).json(nuevoServicio); // devolvemos el objeto creado
   } catch (error) {
-    res.status(500).json({ error: 'Error al guardar el servicio', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al guardar el servicio',
+      detalle: error.message
+    });
   }
 };
 
 // Obtener un único servicio por su ID
 servicioCtrl.getUnicoServicio = async (req, res) => {
   try {
-    const servicioUnico = await Servicio.findById(req.params.id);
-    if (!servicioUnico) {
+    const servicio = await Servicio.findById(req.params.id);
+    if (!servicio) {
       return res.status(404).json({ error: 'Servicio no encontrado' });
     }
-    res.status(200).json(servicioUnico);
+    res.status(200).json(servicio);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el servicio', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al obtener el servicio',
+      detalle: error.message
+    });
   }
 };
 
@@ -46,14 +56,13 @@ servicioCtrl.getUnicoServicio = async (req, res) => {
 servicioCtrl.editarServicio = async (req, res) => {
   try {
     const { id } = req.params;
-    const servicioEditado = {
-      nombre: req.body.nombre,
-      descripcion: req.body.descripcion,
-      precio: req.body.precio,
-      disponible: req.body.disponible
-    };
+    const { nombre, descripcion, precio, disponible } = req.body;
 
-    const servicio = await Servicio.findByIdAndUpdate(id, { $set: servicioEditado }, { new: true });
+    const servicio = await Servicio.findByIdAndUpdate(
+      id,
+      { $set: { nombre, descripcion, precio, disponible } },
+      { new: true }
+    );
 
     if (!servicio) {
       return res.status(404).json({ error: 'Servicio no encontrado' });
@@ -61,7 +70,10 @@ servicioCtrl.editarServicio = async (req, res) => {
 
     res.status(200).json(servicio); // devolvemos el objeto actualizado
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar el servicio', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al actualizar el servicio',
+      detalle: error.message
+    });
   }
 };
 
@@ -74,9 +86,15 @@ servicioCtrl.eliminarServicio = async (req, res) => {
       return res.status(404).json({ error: 'Servicio no encontrado' });
     }
 
-    res.status(200).json({ status: 'Servicio eliminado', servicio });
+    res.status(200).json({
+      message: 'Servicio eliminado',
+      servicio
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el servicio', detalle: error.message });
+    res.status(500).json({
+      error: 'Error al eliminar el servicio',
+      detalle: error.message
+    });
   }
 };
 
