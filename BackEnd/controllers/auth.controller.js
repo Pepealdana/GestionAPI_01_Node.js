@@ -31,19 +31,25 @@ authCtrl.register = async (req, res) => {
 
     // Crear token
     const token = jwt.sign(
-      { id: nuevoUsuario._id, nombre: nuevoUsuario.nombre },
+      { id: nuevoUsuario._id, nombre: nuevoUsuario.nombre, rol: nuevoUsuario.rol },
       process.env.JWT_SECRET || 'secreto_temporal',
       { expiresIn: '2h' }
     );
 
     res.status(201).json({
-      mensaje: 'Usuario registrado correctamente',
-      token
+      status: 'Usuario registrado correctamente',
+      token,
+      usuario: {
+        id: nuevoUsuario._id,
+        nombre: nuevoUsuario.nombre,
+        email: nuevoUsuario.email,
+        rol: nuevoUsuario.rol
+      }
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error interno al registrar' });
+    res.status(500).json({ error: 'Error interno al registrar', detalle: err.message });
   }
 };
 
@@ -72,14 +78,20 @@ authCtrl.login = async (req, res) => {
       { expiresIn: '2h' }
     );
 
-    res.json({
-      mensaje: 'Inicio de sesión exitoso',
-      token
+    res.status(200).json({
+      status: 'Inicio de sesión exitoso',
+      token,
+      usuario: {
+        id: usuario._id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        rol: usuario.rol
+      }
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error interno al iniciar sesión' });
+    res.status(500).json({ error: 'Error interno al iniciar sesión', detalle: err.message });
   }
 };
 
