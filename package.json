@@ -24,7 +24,9 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testMatch": ["**/test/**/*.spec.js"], 
+    "testMatch": [
+      "**/test/**/*.spec.js"
+    ],
     "transform": {}
   }
 }
