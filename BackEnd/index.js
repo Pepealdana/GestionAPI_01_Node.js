@@ -17,22 +17,19 @@ app.use(morgan('dev'));                          // Muestra logs de las peticion
 app.use(express.json());                         // Permite interpretar las peticiones JSON del cliente
 app.use(cors({origin: 'http://localhost:4200'}));// Habilita el acceso desde el frontend (Angular, por ejemplo)
 
-// Ruta base para todo lo relacionado con empleados
+// Rutas
 app.use('/api/empleados', require('./routes/empleado.routes'));
-
-// Ruta base para todo lo relacionado con servicios
 app.use('/api/servicios', require('./routes/servicio.routes'));
-
-// Ruta base para todo lo relacionado con clientes
 app.use('/api/usuarios', require('./routes/usuario.routes'));
-
-// Ruta base para todo lo relacionado con productos
 app.use('/api/productos', require('./routes/producto.routes'));
-
-// Ruta base autenticación
 app.use('/api/auth', require('./routes/auth.routes'));
 
-// Se lanza el servidor y se muestra el puerto activo en consola
-app.listen(app.get('port'), () => {
-    console.log('server activo en el puerto', app.get('port'));
-});
+// Solo levantar el servidor si no está en modo test
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(app.get('port'), () => {
+        console.log('server activo en el puerto', app.get('port'));
+    });
+}
+
+// Exportamos app para Supertest
+module.exports = app;
