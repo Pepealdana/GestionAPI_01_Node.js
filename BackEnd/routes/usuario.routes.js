@@ -3,13 +3,15 @@ const express = require('express');
 const router = express.Router();
 const usuarioCtrl = require('../controllers/usuario.controller');
 
-// 🔧 Middleware de autenticación temporalmente desactivado
+// 🔧 Middlewares de autenticación y permisos (temporalmente desactivados)
 // const verifyToken = require('../middlewares/verifyToken');
-const isAdmin = require('../middlewares/isAdmin');
+// const isAdmin = require('../middlewares/isAdmin');
 
-// Ruta para obtener el perfil del usuario autenticado
-// ⚠️ Auth deshabilitada temporalmente para pruebas
-// router.get('/perfil', verifyToken, (req, res) => {
+/**
+ * Ruta: GET /api/usuarios/perfil
+ * Descripción: Obtener el perfil del usuario autenticado
+ * Nota: Auth deshabilitada temporalmente para pruebas
+ */
 router.get('/perfil', (req, res) => {
   res.json({
     mensaje: 'Acceso autorizado (sin token por ahora)',
@@ -20,22 +22,34 @@ router.get('/perfil', (req, res) => {
   });
 });
 
-// Obtener todos los usuarios
-// router.get('/', verifyToken, usuarioCtrl.getUsuarios);
-router.get('/', usuarioCtrl.getUsuarios); // 🔓 auth desactivada
+/**
+ * Ruta: GET /api/usuarios
+ * Descripción: Obtener todos los usuarios
+ */
+router.get('/', usuarioCtrl.getUsuarios);
 
-// Crear nuevo usuario
+/**
+ * Ruta: GET /api/usuarios/:id
+ * Descripción: Obtener un usuario por ID
+ */
+router.get('/:id', usuarioCtrl.getUsuario);
+
+/**
+ * Ruta: POST /api/usuarios
+ * Descripción: Crear un nuevo usuario
+ */
 router.post('/', usuarioCtrl.createUsuario);
 
-// Obtener un usuario por ID
-// router.get('/:id', verifyToken, isAdmin, usuarioCtrl.editarUsuario);
-router.get('/:id', usuarioCtrl.editarUsuario); // 🔓 auth desactivada
-
-// Actualizar usuario por ID
+/**
+ * Ruta: PUT /api/usuarios/:id
+ * Descripción: Actualizar un usuario por ID
+ */
 router.put('/:id', usuarioCtrl.editarUsuario);
 
-// Eliminar usuario por ID
-// router.delete('/:id', verifyToken, isAdmin, usuarioCtrl.eliminarUsuario);
-router.delete('/:id', usuarioCtrl.eliminarUsuario); // 🔓 auth desactivada
+/**
+ * Ruta: DELETE /api/usuarios/:id
+ * Descripción: Eliminar un usuario por ID
+ */
+router.delete('/:id', usuarioCtrl.eliminarUsuario);
 
 module.exports = router;

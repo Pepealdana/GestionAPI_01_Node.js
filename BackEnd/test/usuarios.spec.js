@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../index"); // servidor principal
+const app = require("../index"); // Servidor principal
 const mongoose = require("mongoose");
 
 let usuarioId;
@@ -11,6 +11,7 @@ describe("CRUD Usuarios API", () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
+      console.log("✅ Conectado a MongoDB para tests de usuarios");
     }
   });
 
@@ -20,21 +21,26 @@ describe("CRUD Usuarios API", () => {
 
   // CREATE
   it("Debería crear un nuevo usuario", async () => {
+    const correoTest = `carlos${Date.now()}@test.com`;
     const res = await request(app)
       .post("/api/usuarios")
       .send({
         nombre: "Carlos Gómez",
-        email: `carlos${Date.now()}@test.com`, // correo dinámico para evitar duplicados
+        email: correoTest,
         telefono: "3001234567",
         rol: "admin",
+        password: "123456", // <-- agregado para cumplir con el modelo
       });
 
     expect([200, 201]).toContain(res.statusCode);
-    expect(res.body).toHaveProperty("status", "Usuario creado");
 
-    // Obtenemos el ID real del usuario recién creado
-    const usuarios = await request(app).get("/api/usuarios");
-    usuarioId = usuarios.body[usuarios.body.length - 1]._id;
+    expect(res.body).toHaveProperty("status", "Usuario creado");
+    expect(res.body).toHaveProperty("usuario");
+    expect(res.body.usuario).toHaveProperty("_id");
+    expect(res.body.usuario).toHaveProperty("nombre", "Carlos Gómez");
+
+    // Guardamos el ID para usar en tests posteriores
+    usuarioId = res.body.usuario._id;
   });
 
   // READ (Todos)
@@ -47,6 +53,8 @@ describe("CRUD Usuarios API", () => {
 
   // READ (Uno por ID)
   it("Debería obtener un usuario por ID", async () => {
+    if (!usuarioId) throw new Error("usuarioId no está definido");
+
     const res = await request(app).get(`/api/usuarios/${usuarioId}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("_id", usuarioId);
@@ -55,23 +63,34 @@ describe("CRUD Usuarios API", () => {
 
   // UPDATE
   it("Debería actualizar un usuario existente", async () => {
+    if (!usuarioId) throw new Error("usuarioId no está definido");
+
+    const correoActualizado = `carlos${Date.now()}@test.com`;
     const res = await request(app)
       .put(`/api/usuarios/${usuarioId}`)
       .send({
         nombre: "Carlos G. Actualizado",
-        email: `carlos${Date.now()}@test.com`, // correo nuevo para que pase validación
+        email: correoActualizado,
         telefono: "3107654321",
         rol: "editor",
+        password: "654321", // <-- agregado para cumplir con el modelo
       });
 
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("status", "Usuario actualizado");
+    expect(res.body).toHaveProperty("usuario");
+    expect(res.body.usuario).toHaveProperty("nombre", "Carlos G. Actualizado");
+    expect(res.body.usuario).toHaveProperty("email", correoActualizado);
   });
 
   // DELETE
   it("Debería eliminar un usuario", async () => {
+    if (!usuarioId) throw new Error("usuarioId no está definido");
+
     const res = await request(app).delete(`/api/usuarios/${usuarioId}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("status", "Usuario eliminado");
+    expect(res.body).toHaveProperty("usuario");
+    expect(res.body.usuario).toHaveProperty("_id", usuarioId);
   });
 });
