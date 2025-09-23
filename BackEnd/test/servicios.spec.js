@@ -26,19 +26,22 @@ describe("CRUD Servicios API", () => {
         nombre: "Hosting",
         descripcion: "Servicio de hosting web",
         precio: 120,
-        disponible: true
+        disponible: true,
       });
-expect([200, 201]).toContain(res.statusCode);
-  expect(res.body).toHaveProperty("_id");
-  servicioId = res.body._id;
-  console.log("Servicio creado con ID:", servicioId); // debug
-});
+
+    expect(res.statusCode).toEqual(201); // fijo en 201
+    expect(res.body).toHaveProperty("_id");
+    expect(res.body).toHaveProperty("nombre", "Hosting");
+
+    servicioId = res.body._id;
+  });
 
   // READ (Todos)
   it("Debería obtener todos los servicios", async () => {
     const res = await request(app).get("/api/servicios");
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
   });
 
   // READ (Uno por ID)
@@ -56,16 +59,20 @@ expect([200, 201]).toContain(res.statusCode);
         nombre: "Hosting Premium",
         descripcion: "Servicio de hosting actualizado",
         precio: 200,
-        disponible: false
+        disponible: false,
       });
+
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("nombre", "Hosting Premium");
+    expect(res.body).toHaveProperty("disponible", false);
   });
 
   // DELETE
   it("Debería eliminar un servicio", async () => {
     const res = await request(app).delete(`/api/servicios/${servicioId}`);
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty("message");
+    expect(res.body).toHaveProperty("status", "Servicio eliminado");
+    expect(res.body).toHaveProperty("servicio");
+    expect(res.body.servicio).toHaveProperty("_id", servicioId);
   });
 });

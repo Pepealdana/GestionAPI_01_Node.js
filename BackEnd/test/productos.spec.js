@@ -26,19 +26,22 @@ describe("CRUD Productos API", () => {
         nombre: "Laptop",
         descripcion: "Laptop de pruebas",
         precio: 2500,
-        stock: 10
+        stock: 10,
       });
-   expect([200, 201]).toContain(res.statusCode); // aceptar 200 o 201
-  expect(res.body).toHaveProperty("_id");
-  productoId = res.body._id; // guardamos el id real
-  console.log("Producto creado con ID:", productoId); // debug
-});
+
+    expect(res.statusCode).toEqual(201); // ahora fijo en 201
+    expect(res.body).toHaveProperty("_id");
+    expect(res.body).toHaveProperty("nombre", "Laptop");
+
+    productoId = res.body._id; // guardamos el id real
+  });
 
   // READ (Todos)
   it("Debería obtener todos los productos", async () => {
     const res = await request(app).get("/api/productos");
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
   });
 
   // READ (Uno por ID)
@@ -56,16 +59,20 @@ describe("CRUD Productos API", () => {
         nombre: "Laptop Pro",
         descripcion: "Laptop actualizada",
         precio: 3000,
-        stock: 15
+        stock: 15,
       });
+
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("nombre", "Laptop Pro");
+    expect(res.body).toHaveProperty("stock", 15);
   });
 
   // DELETE
   it("Debería eliminar un producto", async () => {
     const res = await request(app).delete(`/api/productos/${productoId}`);
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty("message");
+    expect(res.body).toHaveProperty("status", "Producto eliminado");
+    expect(res.body).toHaveProperty("producto");
+    expect(res.body.producto).toHaveProperty("_id", productoId);
   });
 });

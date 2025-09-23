@@ -1,33 +1,38 @@
 // Controlador de usuarios
-// CRUD básico: Crear, Leer, Actualizar y Eliminar
 const Usuario = require('../models/usuario');
-const usuarioCtrl = {}; // Objeto que agrupa todas las funciones
+const usuarioCtrl = {};
 
 // Obtener todos los usuarios
-// Método: GET | Ruta: /api/usuarios
 usuarioCtrl.getUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find();
-  res.json(usuarios);
+  try {
+    const usuarios = await Usuario.find();
+    res.status(200).json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener los usuarios', detalle: error.message });
+  }
 };
 
 // Obtener un único usuario por ID
-// Método: GET | Ruta: /api/usuarios/:id
 usuarioCtrl.getUnicoUsuario = async (req, res) => {
-  const usuario = await Usuario.findById(req.params.id);
-  res.json(usuario);
+  try {
+    const usuario = await Usuario.findById(req.params.id);
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.status(200).json(usuario);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener el usuario', detalle: error.message });
+  }
 };
 
-// Crear un nuevo usuario con validación
-// Método: POST | Ruta: /api/usuarios
+// Crear un nuevo usuario
 usuarioCtrl.createUsuario = async (req, res) => {
   const { nombre, email, telefono, rol } = req.body;
 
-  // Validación de campos vacíos
   if (!nombre || !email || !telefono || !rol) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
 
-  // Validar formato del correo electrónico
   const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!regexCorreo.test(email)) {
     return res.status(400).json({ error: 'El formato del correo es inválido.' });
@@ -35,10 +40,9 @@ usuarioCtrl.createUsuario = async (req, res) => {
 
   try {
     const usuario = new Usuario({ nombre, email, telefono, rol });
-    await usuario.save();
-    res.json({ status: 'Usuario creado' });
+    const nuevoUsuario = await usuario.save();
+    res.status(201).json(nuevoUsuario); // devolvemos el objeto creado
   } catch (err) {
-    // Si el correo ya está registrado
     if (err.code === 11000 && err.keyPattern?.email) {
       res.status(400).json({ error: 'El correo ya está registrado.' });
     } else {
@@ -47,25 +51,21 @@ usuarioCtrl.createUsuario = async (req, res) => {
   }
 };
 
-// Actualizar un usuario por ID con validaciones
-// Método: PUT | Ruta: /api/usuarios/:id
+// Actualizar un usuario por ID
 usuarioCtrl.editarUsuario = async (req, res) => {
   const { id } = req.params;
   const { nombre, email, telefono, rol } = req.body;
 
-  // Validación de campos vacíos
   if (!nombre || !email || !telefono || !rol) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
 
-  // Validar formato del correo
   const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!regexCorreo.test(email)) {
     return res.status(400).json({ error: 'El formato del correo es inválido.' });
   }
 
   try {
-    // Verificar si el correo ya está en uso por otro usuario
     const usuarioExistente = await Usuario.findOne({ email });
     if (usuarioExistente && usuarioExistente._id.toString() !== id) {
       return res.status(400).json({ error: 'El correo ya está registrado por otro usuario.' });
@@ -73,19 +73,31 @@ usuarioCtrl.editarUsuario = async (req, res) => {
 
     const usuarioEditado = { nombre, email, telefono, rol };
 
-    await Usuario.findByIdAndUpdate(id, { $set: usuarioEditado }, { new: true });
-    res.json({ status: 'Usuario actualizado' });
+    const usuario = await Usuario.findByIdAndUpdate(id, { $set: usuarioEditado }, { new: true });
+
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(usuario); // devolvemos el objeto actualizado
   } catch (err) {
     res.status(500).json({ error: 'Error al actualizar el usuario', detalle: err.message });
   }
 };
 
 // Eliminar un usuario por ID
-// Método: DELETE | Ruta: /api/usuarios/:id
 usuarioCtrl.eliminarUsuario = async (req, res) => {
-  await Usuario.findByIdAndDelete(req.params.id);
-  res.json({ status: 'Usuario eliminado' });
+  try {
+    const usuario = await Usuario.findByIdAndDelete(req.params.id);
+
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({ message: 'Usuario eliminado', usuario });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar el usuario', detalle: error.message });
+  }
 };
 
-// Exportamos el controlador
 module.exports = usuarioCtrl;
