@@ -1,5 +1,7 @@
 // Controlador de usuarios
 const Usuario = require('../models/usuario');
+const mongoose = require('mongoose');
+
 const usuarioCtrl = {};
 
 // Obtener todos los usuarios
@@ -8,6 +10,7 @@ usuarioCtrl.getUsuarios = async (req, res) => {
     const usuarios = await Usuario.find();
     res.status(200).json(usuarios);
   } catch (error) {
+    console.error('Error obteniendo usuarios:', error);
     res.status(500).json({
       error: 'Error al obtener los usuarios',
       detalle: error.message
@@ -16,14 +19,21 @@ usuarioCtrl.getUsuarios = async (req, res) => {
 };
 
 // Obtener un único usuario por ID
-usuarioCtrl.getUnicoUsuario = async (req, res) => {
+usuarioCtrl.getUsuario = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de usuario inválido' });
+  }
+
   try {
-    const usuario = await Usuario.findById(req.params.id);
+    const usuario = await Usuario.findById(id);
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
     res.status(200).json(usuario);
   } catch (error) {
+    console.error('Error obteniendo usuario por ID:', error);
     res.status(500).json({
       error: 'Error al obtener el usuario',
       detalle: error.message
@@ -33,9 +43,9 @@ usuarioCtrl.getUnicoUsuario = async (req, res) => {
 
 // Crear un nuevo usuario
 usuarioCtrl.createUsuario = async (req, res) => {
-  const { nombre, email, telefono, rol } = req.body;
+  const { nombre, email, telefono, rol, password } = req.body;
 
-  if (!nombre || !email || !telefono || !rol) {
+  if (!nombre || !email || !telefono || !rol || !password) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
 
@@ -45,7 +55,7 @@ usuarioCtrl.createUsuario = async (req, res) => {
   }
 
   try {
-    const usuario = new Usuario({ nombre, email, telefono, rol });
+    const usuario = new Usuario({ nombre, email, telefono, rol, password });
     const nuevoUsuario = await usuario.save();
 
     res.status(201).json({
@@ -56,6 +66,7 @@ usuarioCtrl.createUsuario = async (req, res) => {
     if (err.code === 11000 && err.keyPattern?.email) {
       res.status(400).json({ error: 'El correo ya está registrado.' });
     } else {
+      console.error("Error creando usuario:", err);
       res.status(500).json({
         error: 'Error al crear el usuario',
         detalle: err.message
@@ -67,9 +78,13 @@ usuarioCtrl.createUsuario = async (req, res) => {
 // Actualizar un usuario por ID
 usuarioCtrl.editarUsuario = async (req, res) => {
   const { id } = req.params;
-  const { nombre, email, telefono, rol } = req.body;
+  const { nombre, email, telefono, rol, password } = req.body;
 
-  if (!nombre || !email || !telefono || !rol) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de usuario inválido' });
+  }
+
+  if (!nombre || !email || !telefono || !rol || !password) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
 
@@ -84,7 +99,7 @@ usuarioCtrl.editarUsuario = async (req, res) => {
       return res.status(400).json({ error: 'El correo ya está registrado por otro usuario.' });
     }
 
-    const usuarioEditado = { nombre, email, telefono, rol };
+    const usuarioEditado = { nombre, email, telefono, rol, password };
 
     const usuario = await Usuario.findByIdAndUpdate(
       id,
@@ -101,6 +116,7 @@ usuarioCtrl.editarUsuario = async (req, res) => {
       usuario
     });
   } catch (err) {
+    console.error('Error actualizando usuario:', err);
     res.status(500).json({
       error: 'Error al actualizar el usuario',
       detalle: err.message
@@ -110,8 +126,14 @@ usuarioCtrl.editarUsuario = async (req, res) => {
 
 // Eliminar un usuario por ID
 usuarioCtrl.eliminarUsuario = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de usuario inválido' });
+  }
+
   try {
-    const usuario = await Usuario.findByIdAndDelete(req.params.id);
+    const usuario = await Usuario.findByIdAndDelete(id);
 
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -122,6 +144,7 @@ usuarioCtrl.eliminarUsuario = async (req, res) => {
       usuario
     });
   } catch (error) {
+    console.error('Error eliminando usuario:', error);
     res.status(500).json({
       error: 'Error al eliminar el usuario',
       detalle: error.message
