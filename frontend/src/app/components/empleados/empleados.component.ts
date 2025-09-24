@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Empleado } from 'src/app/models/empleado.model';
-import { EmpleadoService } from 'src/app/services/empleado.service';
+import { Empleado } from '../../models/empleado.model';
+import { EmpleadoService } from '../../services/empleado.service';
 
 @Component({
   selector: 'app-empleados',
@@ -8,6 +8,7 @@ import { EmpleadoService } from 'src/app/services/empleado.service';
   styleUrls: ['./empleados.component.css']
 })
 export class EmpleadosComponent implements OnInit {
+  empleados: Empleado[] = [];
   empleado: Empleado = {
     name: '',
     position: '',
@@ -15,55 +16,46 @@ export class EmpleadosComponent implements OnInit {
     salary: 0
   };
 
-  empleados: Empleado[] = [];
-
-  columnasTabla: string[] = ['name', 'position', 'office', 'salary', 'acciones'];
-
   constructor(private empleadoService: EmpleadoService) {}
 
   ngOnInit(): void {
     this.obtenerEmpleados();
   }
 
-  guardarEmpleado() {
-    const operacion = this.empleado._id
-      ? this.empleadoService.actualizarEmpleado(this.empleado._id, this.empleado)
-      : this.empleadoService.agregarEmpleado(this.empleado);
-
-    operacion.subscribe({
-      next: () => {
-        this.obtenerEmpleados();
-        this.limpiarFormulario();
-      },
-      error: (err: any) => {
-        console.error('Error al guardar/actualizar:', err);
-      }
-    });
-  }
-
-  obtenerEmpleados() {
+  obtenerEmpleados(): void {
     this.empleadoService.getEmpleados().subscribe({
-      next: (data: Empleado[]) => {
-        this.empleados = data;
-      },
-      error: (err: any) => {
-        console.error('Error al obtener empleados:', err);
-      }
+      next: (res) => (this.empleados = res),
+      error: (err) => console.error(err)
     });
   }
 
-  eliminarEmpleado(id: string) {
+guardarEmpleado(): void {
+  const operacion = this.empleado._id
+    ? this.empleadoService.actualizarEmpleado(this.empleado._id, this.empleado)
+    : this.empleadoService.crearEmpleado(this.empleado);
+
+  operacion.subscribe({
+    next: () => {
+      this.obtenerEmpleados();
+      this.resetForm();
+    },
+    error: (err: any) => console.error('Error en guardarEmpleado:', err)
+  });
+}
+
+  editarEmpleado(empleado: Empleado): void {
+    this.empleado = { ...empleado }; // copiamos para evitar referencias directas
+  }
+
+  eliminarEmpleado(id: string | undefined): void {
+    if (!id) return;
     this.empleadoService.eliminarEmpleado(id).subscribe({
       next: () => this.obtenerEmpleados(),
-      error: (err: any) => console.error('Error al eliminar:', err)
+      error: (err) => console.error(err)
     });
   }
 
-  editarEmpleado(empleado: Empleado) {
-    this.empleado = { ...empleado }; // Clonamos el objeto con _id incluido
-  }
-
-  limpiarFormulario() {
+  resetForm(): void {
     this.empleado = {
       name: '',
       position: '',
