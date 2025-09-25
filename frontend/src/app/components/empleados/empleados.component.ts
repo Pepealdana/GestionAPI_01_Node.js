@@ -32,7 +32,7 @@ export class EmpleadosComponent implements OnInit {
 guardarEmpleado(): void {
   const operacion = this.empleado._id
     ? this.empleadoService.actualizarEmpleado(this.empleado._id, this.empleado)
-    : this.empleadoService.crearEmpleado(this.empleado);
+    : this.empleadoService.agregarEmpleado(this.empleado);
 
   operacion.subscribe({
     next: () => {
