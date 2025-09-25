@@ -7,7 +7,7 @@ import { Empleado } from '../models/empleado.model';
   providedIn: 'root'
 })
 export class EmpleadoService {
-  private apiUrl = 'http://localhost:3000/api/empleados'; // Cambia según tu backend
+  private apiUrl = 'http://localhost:3000/api/empleados'; 
 
   constructor(private http: HttpClient) {}
 
@@ -15,11 +15,11 @@ export class EmpleadoService {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: token ? `Bearer ${token}` : ''
     });
   }
 
-  // Agregar empleado
+  // Crear empleado
   agregarEmpleado(empleado: Empleado): Observable<Empleado> {
     return this.http.post<Empleado>(this.apiUrl, empleado, {
       headers: this.getHeaders()
@@ -40,7 +40,7 @@ export class EmpleadoService {
     });
   }
 
-  // ✅ Actualizar empleado (debe estar dentro de la clase)
+  // Actualizar empleado
   actualizarEmpleado(id: string, empleado: Empleado): Observable<Empleado> {
     return this.http.put<Empleado>(`${this.apiUrl}/${id}`, empleado, {
       headers: this.getHeaders()
