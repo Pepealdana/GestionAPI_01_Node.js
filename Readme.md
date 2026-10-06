@@ -126,3 +126,17 @@ DELETE /api/productos/:id
 ## Estado
 
 Proyecto educativo para practicar desarrollo full-stack con Angular, Node.js, Express, MongoDB y autenticación JWT.
+
+
+## Seguridad — Fase 1
+
+La configuración actual mantiene los secretos fuera del repositorio mediante `.env` y `.env.example`, elimina archivos generados o sensibles del árbol publicado y exige `JWT_SECRET` para firmar tokens.
+
+También se incorporaron:
+
+- `SECURITY.md` con reglas de manejo y reporte.
+- Dependabot para npm y GitHub Actions.
+- CodeQL con consultas `security-extended`.
+- Separación explícita entre configuración local y producción.
+
+**Importante:** el secreto JWT que apareció en versiones históricas se considera comprometido. Debe sustituirse por un secreto nuevo. La eliminación del secreto del historial Git completo queda como una tarea separada de reescritura histórica.
