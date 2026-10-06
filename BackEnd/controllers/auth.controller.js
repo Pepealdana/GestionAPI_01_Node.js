@@ -6,6 +6,13 @@ require('dotenv').config();
 
 const authCtrl = {};
 
+const getJwtSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET no está configurado.');
+  }
+  return process.env.JWT_SECRET;
+};
+
 // REGISTRO
 authCtrl.register = async (req, res) => {
   try {
@@ -15,24 +22,20 @@ authCtrl.register = async (req, res) => {
       return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
     }
 
-    // Verifica si ya existe un usuario con ese nombre o correo
     const usuarioExistente = await Usuario.findOne({ $or: [{ email }, { nombre }] });
     if (usuarioExistente) {
       return res.status(400).json({ error: 'El nombre o correo ya están registrados.' });
     }
 
-    // Cifrar contraseña
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Crear y guardar el usuario
     const nuevoUsuario = new Usuario({ nombre, email, password: hashedPassword });
     await nuevoUsuario.save();
 
-    // Crear token
     const token = jwt.sign(
       { id: nuevoUsuario._id, nombre: nuevoUsuario.nombre, rol: nuevoUsuario.rol },
-      process.env.JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: '2h' }
     );
 
@@ -46,7 +49,6 @@ authCtrl.register = async (req, res) => {
         rol: nuevoUsuario.rol
       }
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error interno al registrar', detalle: err.message });
@@ -74,7 +76,7 @@ authCtrl.login = async (req, res) => {
 
     const token = jwt.sign(
       { id: usuario._id, nombre: usuario.nombre, rol: usuario.rol },
-      process.env.JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: '2h' }
     );
 
@@ -88,7 +90,6 @@ authCtrl.login = async (req, res) => {
         rol: usuario.rol
       }
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error interno al iniciar sesión', detalle: err.message });
